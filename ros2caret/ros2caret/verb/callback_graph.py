@@ -13,7 +13,7 @@
 # limitations under the License.from caret_analyze import Application, Lttng
 
 from caret_analyze import Application
-from caret_analyze.plot import callback_grpah
+from caret_analyze.plot import callback_graph
 from ros2caret.verb import VerbExtension
 
 
@@ -38,4 +38,4 @@ class CallbackGraphVerb(VerbExtension):
         if args.path_name:
             path = app.path[args.path_name]
             callbacks = path.callbacks
-        callback_grpah(app._arch, callbacks, args.output_path)
+        callback_graph(app._arch, callbacks, args.output_path)

@@ -32,10 +32,14 @@ class CallbackGraphVerb(VerbExtension):
             '-p', '--path_name', dest='path_name', type=str, default=None,
             help='the path_name to highlight')
 
+        parser.add_argument(
+            '-s', '--separate', dest='separate', type=bool, default=False,
+            help='If True, split topics. default: false.')
+
     def main(self, *, args):
         app = Application(args.architecture_path, 'yaml', None)
         callbacks = []
         if args.path_name:
             path = app.path[args.path_name]
             callbacks = path.callbacks
-        callback_graph(app._arch, callbacks, args.output_path)
+        callback_graph(app._arch, callbacks, args.output_path, args.separate)

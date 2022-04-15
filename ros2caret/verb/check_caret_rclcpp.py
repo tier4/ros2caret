@@ -39,20 +39,26 @@ class CheckCaretRclcppVerb(VerbExtension):
 
     def add_arguments(self, parser, cli_name):
         parser.add_argument(
-            '-d', '--check_directory', dest='check_directory', type=str,
-            help='the path to the directory to be checked', required=True)
+            '-w', '--workspace', dest='workspace', type=str,
+            help='the path to the workspace to be checked', required=True)
 
     def get_package_name_from_path(self, path: str) -> str:
         package_name = path.replace(self.root_dir_path, '').split('/')[0]
 
         return package_name
 
+    """
+    TODO: Need to speed up.
+          When this command is run against Autoware,
+          it takes approximately one minute to complete.
+    """
     def main(self, *, args):
-        root_dir_path = args.check_directory + '/build/'
+        root_dir_path = args.workspace + '/build/'
         if(os.path.exists(root_dir_path)):
             self.root_dir_path = root_dir_path
         else:
-            logger.error('Specify the path to the directory where the build command completed.')
+            logger.error('"build" directory not found. '
+                         'Specify the path to the workspace where the build command completed.')
             exit(1)
 
         cmd = f'find {self.root_dir_path} -type f ! -size 0 -executable \
@@ -73,7 +79,7 @@ class CheckCaretRclcppVerb(VerbExtension):
             out_str = (subprocess.Popen(cmd,
                                         stdout=subprocess.PIPE,
                                         shell=True).communicate()[0]
-                       ).decode('utf-8')
+                       )
             if(out_str):
                 exists_galactic_tp_file_paths.append(file_path)
 

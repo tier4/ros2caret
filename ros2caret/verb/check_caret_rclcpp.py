@@ -95,8 +95,8 @@ class CheckCaretRclcppVerb(VerbExtension):
         ng_packages = all_packages - ok_packages
         if(ng_packages):
             msg = 'The following packages have not been built using caret-rclcpp:\n'
-            for ng_packages in all_packages - ok_packages:
-                msg += f'\t{ng_packages}\n'
+            for ng_package in ng_packages:
+                msg += f'\t{ng_package}\n'
             logger.warning(msg)
         else:
             logger.info('All packages are built using caret-rclcpp.')

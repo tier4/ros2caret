@@ -26,10 +26,11 @@ setup(
             'ros2caret.verb = ros2caret.verb:VerbExtension'
         ],
         'ros2caret.verb': [
-            'architecture = ros2caret.verb.architecture:ArchitectureVerb',
-            'callback_graph = ros2caret.verb.callback_graph:CallbackGraphVerb',
-            'chain_latency = ros2caret.verb.chain_latency:ChainLatencyVerb',
-            'message_flow = ros2caret.verb.message_flow:MessageFlowVerb',
+            'check_caret_rclcpp = ros2caret.verb.check_caret_rclcpp:CheckCaretRclcppVerb'
+            # 'architecture = ros2caret.verb.architecture:ArchitectureVerb',
+            # 'callback_graph = ros2caret.verb.callback_graph:CallbackGraphVerb',
+            # 'chain_latency = ros2caret.verb.chain_latency:ChainLatencyVerb',
+            # 'message_flow = ros2caret.verb.message_flow:MessageFlowVerb',
         ]
     },
 )

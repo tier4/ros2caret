@@ -1,22 +1,22 @@
-name: sync-files
+- repository: autowarefoundation/autoware
+  files:
+    - source: .github/dependabot.yaml
+    - source: .github/workflows/pre-commit.yaml
+    - source: .github/workflows/pre-commit-optional.yaml
+    - source: .github/workflows/semantic-pull-request.yaml
+    - source: .github/workflows/spell-check-differential.yaml
+    - source: .clang-format
+    - source: .pre-commit-config.yaml
+    - source: .pre-commit-config-optional.yaml
+    - source: .prettierignore
+    - source: .prettierrc.yaml
+    - source: .yamllint.yaml
+    - source: CPPLINT.cfg
 
-on:
-  schedule:
-    - cron: 0 19 * * * # run at 4 AM JST
-  workflow_dispatch:
-
-jobs:
-  sync-files:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Generate token
-        id: generate-token
-        uses: tibdex/github-app-token@v1
-        with:
-          app_id: ${{ secrets.APP_ID }}
-          private_key: ${{ secrets.PRIVATE_KEY }}
-
-      - name: Run sync-files
-        uses: autowarefoundation/autoware-github-actions/sync-files@tier4/proposal
-        with:
-          token: ${{ steps.generate-token.outputs.token }}
+- repository: autowarefoundation/autoware_common
+  files:
+    - source: .github/workflows/build-and-test.yaml
+    - source: .github/workflows/build-and-test-differential.yaml
+    - source: .github/workflows/build-and-test-differential-self-hosted.yaml
+    - source: .github/workflows/build-and-test-self-hosted.yaml
+    - source: .github/workflows/check-build-depends.yaml

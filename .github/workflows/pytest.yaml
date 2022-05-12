@@ -24,6 +24,9 @@ jobs:
         run: |
           mkdir -p dependency_ws
           vcs import dependency_ws < build_depends.repos
+          cd dependency_ws/CARET_analyze
+          export PYTHONPATH=$PWD
+          
         
       - name: ROSDEP install
         run: |

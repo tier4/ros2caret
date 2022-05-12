@@ -31,9 +31,10 @@ jobs:
           echo "====================3"
           cd dependency_ws/CARET_analyze
           echo "====================4"
-          export PYTHONPATH=$PWD
+          # export PYTHONPATH=$PWD
           echo $PYTHONPATH
           echo "====================5"
+          cd ../../
           
         
       - name: ROSDEP install
@@ -49,4 +50,4 @@ jobs:
       - name: Run pytest
         run: |
           . /opt/ros/galactic/setup.sh
-          python3 -m pytest
+          python3 -m pytest test

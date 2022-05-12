@@ -34,6 +34,7 @@ jobs:
           echo "====================4"
           # export PYTHONPATH=$PWD
           echo $PYTHONPATH
+          touch AMENT_IGNORE
           echo "====================5"
           ls
           cd

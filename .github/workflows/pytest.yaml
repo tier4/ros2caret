@@ -19,6 +19,11 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y python3-babeltrace python3-lttng python3-bt2
         shell: bash
+
+      - name: Clone dependency packages
+        run: |
+          mkdir -p dependency_ws
+          vcs import dependency_ws < build_depends.repos
         
       - name: ROSDEP install
         run: |

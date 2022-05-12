@@ -32,6 +32,7 @@ jobs:
           cd dependency_ws/CARET_analyze
           echo "====================4"
           export PYTHONPATH=$PWD
+          echo $PYTHONPATH
           echo "====================5"
           
         

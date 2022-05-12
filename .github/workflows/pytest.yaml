@@ -23,6 +23,7 @@ jobs:
       - name: Clone dependency packages
         run: |
           echo "====================1"
+          cd ../
           mkdir -p dependency_ws
           ls
           echo "====================2"
@@ -34,7 +35,9 @@ jobs:
           # export PYTHONPATH=$PWD
           echo $PYTHONPATH
           echo "====================5"
-          cd ../../
+          ls
+          cd
+          ls
           
         
       - name: ROSDEP install

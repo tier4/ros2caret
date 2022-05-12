@@ -22,7 +22,8 @@ jobs:
 
       - name: Install Python packages
         run: |
-          pip3 install ament_copyright
+          python3 --version
+          pip install ament_copyright
           pip3 install ament_flake8
           pip3 install ament_pep257
           sudo apt install -y python3-pytest

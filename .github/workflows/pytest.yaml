@@ -22,10 +22,17 @@ jobs:
 
       - name: Clone dependency packages
         run: |
+          echo "====================1"
           mkdir -p dependency_ws
+          ls
+          echo "====================2"
           vcs import dependency_ws < build_depends.repos
+          ls dependency_ws
+          echo "====================3"
           cd dependency_ws/CARET_analyze
+          echo "====================4"
           export PYTHONPATH=$PWD
+          echo "====================5"
           
         
       - name: ROSDEP install

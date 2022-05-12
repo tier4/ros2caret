@@ -20,4 +20,4 @@ jupyterlab
 graphviz
 
 tqdm
-mypy
+ament_mypy

@@ -20,6 +20,15 @@ jobs:
           sudo apt-get install -y python3-babeltrace python3-lttng python3-bt2
         shell: bash
 
+      - name: Install Python packages
+        run: |
+          pip3 install ament_copyright
+          pip3 install ament_flake8
+          pip3 install ament_pep257
+          sudo apt install -y python3-pytest
+          pip3 install ament_mypy
+        shell: bash
+
       - name: Clone dependency packages
         run: |
           echo "====================1"
@@ -41,12 +50,12 @@ jobs:
           ls
           
         
-      - name: ROSDEP install
-        run: |
-          sudo apt-get install python3-rosdep
-          # sudo rosdep init
-          rosdep update
-          rosdep install -i --from-paths . -y --rosdistro galactic
+      # - name: ROSDEP install
+      #   run: |
+      #     sudo apt-get install python3-rosdep
+      #     # sudo rosdep init
+      #     rosdep update
+      #     rosdep install -i --from-paths . -y --rosdistro galactic
   
       - name: Install dependent packages
         run: python3 -m pip install -r requirements.txt

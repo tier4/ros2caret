@@ -23,7 +23,7 @@ jobs:
       - name: Clone dependency packages
         run: |
           echo "====================1"
-          cd ../
+          # cd ../
           mkdir -p dependency_ws
           ls
           echo "====================2"

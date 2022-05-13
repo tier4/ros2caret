@@ -19,14 +19,26 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y python3-babeltrace python3-lttng python3-bt2
         shell: bash
-        
-      - name: ROSDEP install
+
+      - name: Install test packages
         run: |
-          sudo apt-get install python3-rosdep
-          # sudo rosdep init
-          rosdep update
-          rosdep install -i --from-paths . -y --rosdistro galactic
-  
+          sudo apt install -y ros-galactic-ament-copyright
+          sudo apt install -y ros-galactic-ament-flake8
+          sudo apt install -y ros-galactic-ament-pep257
+          sudo apt install -y ros-galactic-ament-mypy
+        shell: bash
+
+      # - name: Clone dependency packages
+      #   run: |
+      #     mkdir -p dependency_ws
+      #     vcs import dependency_ws < build_depends.repos
+      #     cd dependency_ws/CARET_analyze
+      #     export PYTHONPATH=$PWD
+      #     echo $PYTHONPATH
+      #     touch AMENT_IGNORE
+      #     cd ../../
+      #   shell: bash
+
       - name: Install dependent packages
         run: python3 -m pip install -r requirements.txt
 

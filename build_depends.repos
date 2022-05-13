@@ -1,0 +1,5 @@
+repositories:
+  CARET_analyze:
+    type: git
+    url: https://github.com/tier4/CARET_analyze.git
+    version: main

@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.from caret_analyze import Application, Lttng
 
-from logging import getLogger
+from logging import getLogger, INFO
 import os
 import subprocess
 
 from ros2caret.verb import VerbExtension
 
 logger = getLogger(__name__)
+logger.setLevel(INFO)
 
 
 galactic_tp_symbol_names = [

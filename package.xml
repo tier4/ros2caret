@@ -7,7 +7,7 @@
   <maintainer email="hasegawa@isp.co.jp">hsgwa</maintainer>
   <license>Apache License 2.0</license>
 
-  <exec_depend>tabulate</exec_depend>
+  <exec_depend>python-tabulate-pip</exec_depend>
   <depend>ros2cli</depend>
   <depend>caret_analyze</depend>
   <test_depend>ament_copyright</test_depend>

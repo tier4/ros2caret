@@ -21,9 +21,10 @@ class RecordSimTime(VerbExtension):
         pass
 
     def main(self, *, args):
-        lttng = Lttng(args.trace_dir, force_conversion=True)
-        app = Application(args.architecture_path, 'yaml', lttng)
-        path = app.path[args.path_name]
+        raise NotImplementedError('disabled')
+        # lttng = Lttng(args.trace_dir, force_conversion=True)
+        # app = Application(args.architecture_path, 'yaml', lttng)
+        # path = app.path[args.path_name]
 
-        message_flow(path, export_path=args.output_path,
-                     granularity=args.granularity)
+        # message_flow(path, export_path=args.output_path,
+        #              granularity=args.granularity)

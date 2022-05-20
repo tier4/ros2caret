@@ -12,17 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.from caret_analyze import Application, Lttng
 
-
-from caret_analyze import Lttng
 from ros2caret.verb import VerbExtension
 
 
-class CheckCTFVerb(VerbExtension):
+class RecordSimTime(VerbExtension):
 
     def add_arguments(self, parser, cli_name):
-        parser.add_argument(
-            '-d', '--trace_dir', dest='trace_dir', type=str,
-            help='the path to the trace directory to be checked', required=True)
+        pass
 
     def main(self, *, args):
-        Lttng(args.trace_dir)
+        raise NotImplementedError('disabled')
+        # lttng = Lttng(args.trace_dir, force_conversion=True)
+        # app = Application(args.architecture_path, 'yaml', lttng)
+        # path = app.path[args.path_name]
+
+        # message_flow(path, export_path=args.output_path,
+        #              granularity=args.granularity)

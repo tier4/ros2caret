@@ -26,7 +26,7 @@ jobs:
           sudo apt install -y ros-galactic-ament-flake8
           sudo apt install -y ros-galactic-ament-pep257
           sudo apt install -y ros-galactic-ament-mypy
-          sudo apt install -y python3-tqdm
+          # sudo apt install -y python3-tqdm
         shell: bash
 
       # - name: Clone dependency packages

@@ -20,14 +20,13 @@ jobs:
           sudo apt-get install -y python3-babeltrace python3-lttng python3-bt2
         shell: bash
 
-      - name: Install test packages
-        run: |
-          sudo apt install -y ros-galactic-ament-copyright
-          sudo apt install -y ros-galactic-ament-flake8
-          sudo apt install -y ros-galactic-ament-pep257
-          sudo apt install -y ros-galactic-ament-mypy
-          # sudo apt install -y python3-tqdm
-        shell: bash
+      # - name: Install test packages
+      #   run: |
+      #     sudo apt install -y ros-galactic-ament-copyright
+      #     sudo apt install -y ros-galactic-ament-flake8
+      #     sudo apt install -y ros-galactic-ament-pep257
+      #     sudo apt install -y ros-galactic-ament-mypy
+      #   shell: bash
 
       # - name: Clone dependency packages
       #   run: |
@@ -39,6 +38,13 @@ jobs:
       #     touch AMENT_IGNORE
       #     cd ../../
       #   shell: bash
+
+      - name: ROSDEP install
+        run: |
+          sudo apt-get install python3-rosdep
+          # sudo rosdep init
+          rosdep update
+          rosdep install -i --from-paths . -y --rosdistro galactic
 
       - name: Install dependent packages
         run: python3 -m pip install -r requirements.txt

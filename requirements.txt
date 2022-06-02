@@ -16,6 +16,8 @@ pybind11
 pandas>=1.4.0
 bokeh
 pandas-bokeh
+nbformat>=5.4.0
+nbconvert>=6.4.4
 jupyterlab
 graphviz
 

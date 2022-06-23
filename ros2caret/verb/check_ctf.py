@@ -15,7 +15,7 @@
 
 from logging import getLogger
 
-from caret_analyze import Architecture
+from caret_analyze import Architecture, Lttng
 from caret_analyze.exceptions import Error
 from ros2caret.verb import VerbExtension
 
@@ -31,6 +31,7 @@ class CheckCTFVerb(VerbExtension):
 
     def main(self, *, args):
         try:
+            Lttng(args.trace_dir)
             Architecture('lttng', args.trace_dir)
         except Error as e:
             logger.warning(e)

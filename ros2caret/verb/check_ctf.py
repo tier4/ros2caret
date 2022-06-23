@@ -13,8 +13,13 @@
 # limitations under the License.from caret_analyze import Application, Lttng
 
 
+from logging import getLogger
+
 from caret_analyze import Architecture
+from caret_analyze.exceptions import Error
 from ros2caret.verb import VerbExtension
+
+logger = getLogger(__name__)
 
 
 class CheckCTFVerb(VerbExtension):
@@ -25,4 +30,7 @@ class CheckCTFVerb(VerbExtension):
             help='the path to the trace directory to be checked', required=True)
 
     def main(self, *, args):
-        Architecture('lttng', args.trace_dir)
+        try:
+            Architecture('lttng', args.trace_dir)
+        except Error as e:
+            logger.warning(e)

@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.from caret_analyze import Application, Lttng
 
-from logging import Formatter, getLogger, WARNING, StreamHandler
-
 from ros2cli.plugin_system import PLUGIN_SYSTEM_VERSION
 from ros2cli.plugin_system import satisfies_version
 

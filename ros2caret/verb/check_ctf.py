@@ -13,7 +13,7 @@
 # limitations under the License.from caret_analyze import Application, Lttng
 
 
-from caret_analyze import Lttng
+from caret_analyze import Architecture
 from ros2caret.verb import VerbExtension
 
 
@@ -25,4 +25,4 @@ class CheckCTFVerb(VerbExtension):
             help='the path to the trace directory to be checked', required=True)
 
     def main(self, *, args):
-        Lttng(args.trace_dir)
+        Architecture('lttng', args.trace_dir)

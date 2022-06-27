@@ -12,8 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.from caret_analyze import Application, Lttng
 
-from logging import Formatter, getLogger, INFO, StreamHandler
-
 from ros2cli.plugin_system import PLUGIN_SYSTEM_VERSION
 from ros2cli.plugin_system import satisfies_version
 
@@ -38,18 +36,6 @@ class VerbExtension:
     def __init__(self):
         super(VerbExtension, self).__init__()
         satisfies_version(PLUGIN_SYSTEM_VERSION, '^0.1')
-
-        handler = StreamHandler()
-        handler.setLevel(INFO)
-
-        fmt = '%(levelname)-8s: %(asctime)s | %(message)s'
-        formatter = Formatter(
-            fmt,
-            datefmt='%Y-%m-%d %H:%M:%S')
-        handler.setFormatter(formatter)
-
-        logger = getLogger()
-        logger.addHandler(handler)
 
     def add_arguments(self, parser, cli_name):
         pass

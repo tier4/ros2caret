@@ -12,14 +12,30 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.from caret_analyze import Application, Lttng
 
-from logging import getLogger, INFO
+from __future__ import annotations
+
+from logging import Formatter, getLogger, INFO, StreamHandler
+
 import os
+
 import subprocess
+from typing import Callable, List, Set
 
 from ros2caret.verb import VerbExtension
 
+handler = StreamHandler()
+handler.setLevel(INFO)
+
+fmt = '%(levelname)-8s: %(asctime)s | %(message)s'
+formatter = Formatter(
+    fmt,
+    datefmt='%Y-%m-%d %H:%M:%S')
+handler.setFormatter(formatter)
+
 logger = getLogger(__name__)
 logger.setLevel(INFO)
+logger.addHandler(handler)
+
 
 class CheckCaretRclcppVerb(VerbExtension):
 

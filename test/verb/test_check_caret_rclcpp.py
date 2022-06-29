@@ -62,10 +62,10 @@ class TestCheckCaretRclcpp:
 
     def test_get_package_name(self):
         get_package_name = RclcppCheck._create_get_package_name('')
-        assert get_package_name('foo/bar/hoge') == 'foo'
+        assert get_package_name('foo/bar/baz') == 'foo'
 
         get_package_name = RclcppCheck._create_get_package_name('foo/')
-        assert get_package_name('foo/bar/hoge') == 'bar'
+        assert get_package_name('foo/bar/baz') == 'bar'
 
         get_package_name = RclcppCheck._create_get_package_name('foo/bar/')
-        assert get_package_name('foo/bar/hoge') == 'hoge'
+        assert get_package_name('foo/bar/baz') == 'baz'

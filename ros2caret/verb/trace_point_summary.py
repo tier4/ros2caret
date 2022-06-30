@@ -27,7 +27,9 @@ class TracePointSummaryVerb(VerbExtension):
             help='the path to the trace directory', required=True)
         parser.add_argument(
             '-c', '--display_check', dest='display_check', action='store_true',
-            help='display the error checks to the trace results.', required=False)
+            help='display the error checks to the trace results.',
+            required=False
+        )
 
     def main(self, *, args):
         if(not args.display_check):
@@ -36,7 +38,8 @@ class TracePointSummaryVerb(VerbExtension):
 
         lttng = Lttng(args.trace_dir)
         tp_count_df = lttng.get_count().reset_index()
-        tp_count_df.rename(columns={'size': 'number_of_trace_points'}, inplace=True)
+        tp_count_df.rename(columns={'size': 'number_of_trace_points'},
+                           inplace=True)
         print('\n')
         print(tabulate(tp_count_df,
                        tp_count_df.columns,

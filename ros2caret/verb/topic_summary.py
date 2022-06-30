@@ -27,7 +27,9 @@ class TopicSummaryVerb(VerbExtension):
             help='the path to the trace directory', required=True)
         parser.add_argument(
             '-c', '--display_check', dest='display_check', action='store_true',
-            help='display the error checks to the trace results.', required=False)
+            help='display the error checks to the trace results.',
+            required=False
+        )
 
     def main(self, *, args):
         if(not args.display_check):
@@ -36,7 +38,8 @@ class TopicSummaryVerb(VerbExtension):
 
         lttng = Lttng(args.trace_dir)
         topic_count_df = lttng.get_count(groupby=['topic_name']).reset_index()
-        topic_count_df.rename(columns={'size': 'number_of_trace_points'}, inplace=True)
+        topic_count_df.rename(columns={'size': 'number_of_trace_points'},
+                              inplace=True)
         topic_count_df = topic_count_df[topic_count_df['topic_name'] != '-']
 
         print('\n')

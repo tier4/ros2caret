@@ -37,8 +37,11 @@ class CallbackGraphVerb(VerbExtension):
             help='If True, split topics. default: false.')
 
         parser.add_argument(
-            '-t', '--target_path_only', dest='target_path_only', type=bool, default=False,
-            help='Show only the path of the target. The path must be specified with --path_name.')
+            '-t', '--target_path_only', dest='target_path_only',
+            type=bool, default=False,
+            help=('Show only the path of the target. '
+                  'The path must be specified with --path_name.')
+        )
 
     def main(self, *, args):
         app = Application(args.architecture_path, 'yaml', None)
@@ -47,5 +50,9 @@ class CallbackGraphVerb(VerbExtension):
             path = app.path[args.path_name]
             callbacks = path.callbacks
         callback_graph(
-            app._arch, callbacks, args.output_path, args.separate, args.target_path_only
+            app._arch,
+            callbacks,
+            args.output_path,
+            args.separate,
+            args.target_path_only
         )

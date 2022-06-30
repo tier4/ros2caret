@@ -27,7 +27,9 @@ class NodeSummaryVerb(VerbExtension):
             help='the path to the trace directory', required=True)
         parser.add_argument(
             '-c', '--display_check', dest='display_check', action='store_true',
-            help='display the error checks to the trace results.', required=False)
+            help='display the error checks to the trace results.',
+            required=False
+        )
 
     def main(self, *, args):
         if(not args.display_check):
@@ -36,7 +38,8 @@ class NodeSummaryVerb(VerbExtension):
 
         lttng = Lttng(args.trace_dir)
         node_count_df = lttng.get_count(groupby=['node_name']).reset_index()
-        node_count_df.rename(columns={'size': 'number_of_trace_points'}, inplace=True)
+        node_count_df.rename(columns={'size': 'number_of_trace_points'},
+                             inplace=True)
         node_count_df = node_count_df[node_count_df['node_name'] != '-']
 
         print('\n')

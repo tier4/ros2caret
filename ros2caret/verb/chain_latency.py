@@ -22,7 +22,9 @@ class ChainLatencyVerb(VerbExtension):
     def add_arguments(self, parser, cli_name):
         parser.add_argument(
             '-t', '--trace_directory', dest='trace_directory', type=str,
-            help='the path to the main trace directory results path', required=True)
+            help='the path to the main trace directory results path',
+            required=True
+        )
 
         parser.add_argument(
             '-a', '--architecture_path', dest='architecture_path', type=str,

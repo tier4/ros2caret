@@ -27,7 +27,7 @@ class TracePointSummaryVerb(VerbExtension):
         parser.add_argument(
             '--duration_filter', dest='d_filter_args',
             type=float, nargs='+',
-            help=('Load only this duration [s] from the offset. '
+            help=('Load only this duration from the offset. '
                   'arg 1: duration [s], arg 2: offset [s]. '),
             required=False
         )

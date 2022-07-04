@@ -30,28 +30,24 @@ from tabulate import tabulate
 
 class Summary:
 
-    def __init__(self, args, group_key: str) -> None:
+    def __init__(self, args, groupby: str) -> None:
         if not args.display_check:
             root_logger = getLogger()
             root_logger.setLevel(ERROR)
 
         filters = Summary._get_filters(args.d_filter_args,
                                        args.s_filter_args)
-        if filters:
-            lttng = Lttng(args.trace_dir, event_filters=filters)
-            fi_st, fi_ft = Summary._get_filtered_duration(lttng)
-        else:
-            lttng = Lttng(args.trace_dir)
-
-        summary_df = Summary._get_summary_df(lttng, group_key)
+        lttng = Lttng(args.trace_dir, event_filters=filters)
+        summary_df = Summary._get_summary_df(lttng, groupby)
 
         # Logging
         print('\n')
         print(Summary._get_trace_creation_datetime(args.trace_dir))
         st, ft = Summary._get_measure_duration(args.trace_dir)
-        print(f'Measurement duration [ns]: {st} ~ {ft}')
+        print(f'measurement_duration [ns]: {st} ~ {ft}')
         if filters:
-            print(f'Filtered duration [ns]: {fi_st} ~ {fi_ft}')
+            fi_st, fi_ft = Summary._get_filtered_duration(lttng)
+            print(f'filtered_duration [ns]: {fi_st} ~ {fi_ft}')
         print('\n')
         print(tabulate(summary_df,
                        summary_df.columns,
@@ -77,12 +73,12 @@ class Summary:
     @staticmethod
     def _get_summary_df(
         lttng: Lttng,
-        group_key: str
+        groupby: str
     ) -> pd.DataFrame:
-        count_df = lttng.get_count(groupby=[group_key]).reset_index()
+        count_df = lttng.get_count(groupby=[groupby]).reset_index()
         count_df.rename(columns={'size': 'number_of_trace_points'},
                         inplace=True)
-        count_df = count_df[count_df[group_key] != '-']
+        count_df = count_df[count_df[groupby] != '-']
 
         return count_df
 
@@ -100,20 +96,20 @@ class Summary:
     def _get_measure_duration(
         trace_dir: str
     ) -> Tuple[int, int]:
-        msg_iter = bt2.TraceCollectionMessageIterator(
+        msgs = bt2.TraceCollectionMessageIterator(
             trace_dir,
             stream_intersection_mode=True
         )
 
-        earliest_start_time = sys.maxsize
-        latest_end_time = 0
-        for s in msg_iter._stream_inter_port_to_range.values():
-            if earliest_start_time > s[0]:
-                earliest_start_time = s[0]
-            if latest_end_time < s[1]:
-                latest_end_time = s[1]
+        earliest_stream_st = sys.maxsize
+        latest_stream_ft = 0
+        for stream_st, stream_ft in msgs._stream_inter_port_to_range.values():
+            if earliest_stream_st > stream_st:
+                earliest_stream_st = stream_st
+            if latest_stream_ft < stream_ft:
+                latest_stream_ft = stream_ft
 
-        return earliest_start_time, latest_end_time
+        return earliest_stream_st, latest_stream_ft
 
     @staticmethod
     def _get_filters(

@@ -12,9 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.from caret_analyze import Application, Lttng
 
-import datetime
+import glob
 from logging import ERROR, getLogger
-import pathlib
+import os
+import re
 import sys
 from typing import List, Optional, Tuple
 
@@ -46,9 +47,7 @@ class Summary:
 
         # Logging
         print('\n')
-        print('Measurement date: ', end='')
-        print(datetime.datetime.fromtimestamp(
-                pathlib.Path(args.trace_dir).stat().st_ctime))
+        print(Summary._get_trace_creation_datetime(args.trace_dir))
         st, ft = Summary._get_measure_duration(args.trace_dir)
         print(f'Measurement duration [ns]: {st} ~ {ft}')
         if filters:
@@ -58,6 +57,22 @@ class Summary:
                        summary_df.columns,
                        tablefmt='presto',
                        showindex=False))
+
+    @staticmethod
+    def _get_trace_creation_datetime(
+        trace_dir: str
+    ) -> str:
+        metadata_path = os.path.dirname(glob.glob(f'{trace_dir}/**/metadata',
+                                                  recursive=True)[0])
+        result = bt2.QueryExecutor(
+            bt2.find_plugin('ctf').source_component_classes['fs'],
+            'metadata-info',
+            {'path': metadata_path}
+        ).query()
+        datetime = re.search(r'trace_creation_datetime = "\S+"',
+                             str(result['text'])).group().replace(' =', ':')
+
+        return datetime
 
     @staticmethod
     def _get_summary_df(

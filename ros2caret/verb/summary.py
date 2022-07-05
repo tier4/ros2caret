@@ -40,12 +40,18 @@ class Summary:
         lttng = Lttng(args.trace_dir, event_filters=filters)
         summary_df = Summary._get_summary_df(lttng, groupby)
 
-        # Logging
+        Summary._print_summary(lttng, summary_df)
+
+    @staticmethod
+    def _print_summary(
+        lttng: Lttng,
+        summary_df: pd.DataFrame
+    ) -> None:
         print('\n')
-        print(Summary._get_trace_creation_datetime(args.trace_dir))
-        st, ft = Summary._get_measure_duration(args.trace_dir)
+        print(lttng.get_trace_creation_datetime().replace(' =', ':'))
+        st, ft = lttng.get_measure_duration()
         print(f'measurement_duration [ns]: {st} ~ {ft}')
-        if filters:
+        if Lttng._last_filters:
             fi_st, fi_ft = Summary._get_filtered_duration(lttng)
             print(f'filtered_duration [ns]: {fi_st} ~ {fi_ft}')
         print('\n')
@@ -53,22 +59,6 @@ class Summary:
                        summary_df.columns,
                        tablefmt='presto',
                        showindex=False))
-
-    @staticmethod
-    def _get_trace_creation_datetime(
-        trace_dir: str
-    ) -> str:
-        metadata_path = os.path.dirname(glob.glob(f'{trace_dir}/**/metadata',
-                                                  recursive=True)[0])
-        result = bt2.QueryExecutor(
-            bt2.find_plugin('ctf').source_component_classes['fs'],
-            'metadata-info',
-            {'path': metadata_path}
-        ).query()
-        datetime = re.search(r'trace_creation_datetime = "\S+"',
-                             str(result['text'])).group().replace(' =', ':')
-
-        return datetime
 
     @staticmethod
     def _get_summary_df(
@@ -93,29 +83,10 @@ class Summary:
                 cb_df['callback_end_timestamp'].max())
 
     @staticmethod
-    def _get_measure_duration(
-        trace_dir: str
-    ) -> Tuple[int, int]:
-        msgs = bt2.TraceCollectionMessageIterator(
-            trace_dir,
-            stream_intersection_mode=True
-        )
-
-        earliest_stream_st = sys.maxsize
-        latest_stream_ft = 0
-        for stream_st, stream_ft in msgs._stream_inter_port_to_range.values():
-            if earliest_stream_st > stream_st:
-                earliest_stream_st = stream_st
-            if latest_stream_ft < stream_ft:
-                latest_stream_ft = stream_ft
-
-        return earliest_stream_st, latest_stream_ft
-
-    @staticmethod
     def _get_filters(
         d_filter_args: Optional[List[float]],
         s_filter_args: Optional[List[float]]
-    ) -> List[Optional[LttngEventFilter]]:
+    ) -> Optional[List[LttngEventFilter]]:
         filters = []
         if d_filter_args:
             filters.append(
@@ -130,4 +101,4 @@ class Summary:
                     s_filter_args[1]
                 ))
 
-        return filters
+        return filters or None

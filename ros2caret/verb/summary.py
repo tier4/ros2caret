@@ -12,14 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.from caret_analyze import Application, Lttng
 
-import glob
 from logging import ERROR, getLogger
-import os
-import re
-import sys
 from typing import List, Optional, Tuple
-
-import bt2
 
 from caret_analyze import Lttng, LttngEventFilter
 

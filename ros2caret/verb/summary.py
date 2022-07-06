@@ -42,12 +42,13 @@ class Summary:
         summary_df: pd.DataFrame
     ) -> None:
         print('\n')
-        print(lttng.get_trace_creation_datetime().replace(' =', ':'))
-        st, ft = lttng.get_measure_duration()
-        print(f'measurement_duration [ns]: {st} ~ {ft}')
+        print('Trace creation datetime: '
+              f'{lttng.get_trace_creation_datetime()}')
+        st, ft = lttng.get_trace_range()
+        print(f'Trace range [ns]: {st} ~ {ft}')
         if Lttng._last_filters:
             fi_st, fi_ft = Summary._get_filtered_duration(lttng)
-            print(f'filtered_duration [ns]: {fi_st} ~ {fi_ft}')
+            print(f'Filtered range [ns]: {fi_st} ~ {fi_ft}')
         print('\n')
         print(tabulate(summary_df,
                        summary_df.columns,

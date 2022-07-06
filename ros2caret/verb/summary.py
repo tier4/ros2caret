@@ -47,7 +47,7 @@ class Summary:
         st, ft = lttng.get_trace_range()
         print(f'Trace range [ns]: {st} ~ {ft}')
         if Lttng._last_filters:
-            fi_st, fi_ft = Summary._get_filtered_duration(lttng)
+            fi_st, fi_ft = Summary._get_filtered_range(lttng)
             print(f'Filtered range [ns]: {fi_st} ~ {fi_ft}')
         print('\n')
         print(tabulate(summary_df,
@@ -68,7 +68,7 @@ class Summary:
         return count_df
 
     @staticmethod
-    def _get_filtered_duration(
+    def _get_filtered_range(
         lttng: Lttng
     ) -> Tuple[int, int]:
         cb_records = lttng.compose_callback_records()

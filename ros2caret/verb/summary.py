@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.from caret_analyze import Application, Lttng
 
+from datetime import datetime
 from logging import ERROR, getLogger
 from typing import List, Optional, Tuple
 
@@ -22,9 +23,16 @@ import pandas as pd
 from tabulate import tabulate
 
 
+logger = getLogger(__name__)
+
+
 class Summary:
 
-    def __init__(self, args, groupby: str) -> None:
+    def __init__(
+        self,
+        args,
+        groupby: str
+    ) -> None:
         if not args.display_check:
             root_logger = getLogger()
             root_logger.setLevel(ERROR)
@@ -33,7 +41,6 @@ class Summary:
                                        args.s_filter_args)
         lttng = Lttng(args.trace_dir, event_filters=filters)
         summary_df = Summary._get_summary_df(lttng, groupby)
-
         Summary._print_summary(lttng, summary_df)
 
     @staticmethod
@@ -41,15 +48,30 @@ class Summary:
         lttng: Lttng,
         summary_df: pd.DataFrame
     ) -> None:
-        print('\n')
-        print('Trace creation datetime: '
-              f'{lttng.get_trace_creation_datetime()}')
-        st, ft = lttng.get_trace_range()
-        print(f'Trace range [ns]: {st} ~ {ft}')
+        msg = '=============================================\n'
+
+        try:
+            msg += ('Trace creation datetime | '
+                    f'{str(lttng.get_trace_creation_datetime())[:-7]}\n')
+            bt, et = lttng.get_trace_range()
+            msg += ('Trace range             | '
+                    f'{bt.strftime("%H:%M:%S")} ~ '
+                    f'{et.strftime("%H:%M:%S")}\n'
+                    f'Trace duration          | {str(et - bt)[:-7]}\n')
+        except AttributeError as e:
+            logger.error(f'{e}. Please update caret_analyze.')
+
         if Lttng._last_filters:
-            fi_st, fi_ft = Summary._get_filtered_range(lttng)
-            print(f'Filtered range [ns]: {fi_st} ~ {fi_ft}')
-        print('\n')
+            fi_bt, fi_et = Summary._get_filtered_range(lttng)
+            msg += (
+                'Filtered trace range    | '
+                f'{fi_bt.strftime("%H:%M:%S")} ~ '
+                f'{fi_et.strftime("%H:%M:%S")}\n'
+                f'Filtered trace duration | {str(fi_et - fi_bt)[:-7]}\n'
+            )
+        msg += '=============================================\n'
+        print(msg)
+
         print(tabulate(summary_df,
                        summary_df.columns,
                        tablefmt='presto',
@@ -70,12 +92,14 @@ class Summary:
     @staticmethod
     def _get_filtered_range(
         lttng: Lttng
-    ) -> Tuple[int, int]:
+    ) -> Tuple[datetime, datetime]:
         cb_records = lttng.compose_callback_records()
         cb_df = cb_records.to_dataframe()
 
-        return (cb_df['callback_start_timestamp'].min(),
-                cb_df['callback_end_timestamp'].max())
+        return (datetime.fromtimestamp(
+                    cb_df['callback_start_timestamp'].min() * 1.0e-9),
+                datetime.fromtimestamp(
+                    cb_df['callback_end_timestamp'].max() * 1.0e-9))
 
     @staticmethod
     def _get_filters(

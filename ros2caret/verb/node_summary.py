@@ -45,4 +45,5 @@ class NodeSummaryVerb(VerbExtension):
         )
 
     def main(self, *, args):
-        Summary(args, 'node_name')
+        summary = Summary(args, 'node_name')
+        summary.print_summary()

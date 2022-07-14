@@ -45,4 +45,5 @@ class TracePointSummaryVerb(VerbExtension):
         )
 
     def main(self, *, args):
-        Summary(args, 'trace_point')
+        summary = Summary(args, 'trace_point')
+        summary.print_summary()

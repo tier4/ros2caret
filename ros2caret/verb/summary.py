@@ -37,23 +37,20 @@ class Summary:
             root_logger = getLogger()
             root_logger.setLevel(ERROR)
 
-        filters = Summary._get_filters(args.d_filter_args,
-                                       args.s_filter_args)
-        lttng = Lttng(args.trace_dir, event_filters=filters)
-        summary_df = Summary._get_summary_df(lttng, groupby)
-        Summary._print_summary(lttng, summary_df)
+        filters = self._get_filters(args.d_filter_args,
+                                    args.s_filter_args)
+        self._lttng = Lttng(args.trace_dir, event_filters=filters)
+        self._summary_df = self._get_summary_df(self._lttng, groupby)
 
-    @staticmethod
-    def _print_summary(
-        lttng: Lttng,
-        summary_df: pd.DataFrame
+    def print_summary(
+        self
     ) -> None:
         msg = '=============================================\n'
 
         try:
             msg += ('Trace creation datetime | '
-                    f'{str(lttng.get_trace_creation_datetime())[:-7]}\n')
-            bt, et = lttng.get_trace_range()
+                    f'{str(self._lttng.get_trace_creation_datetime())[:-7]}\n')
+            bt, et = self._lttng.get_trace_range()
             msg += ('Trace range             | '
                     f'{bt.strftime("%H:%M:%S")} ~ '
                     f'{et.strftime("%H:%M:%S")}\n'
@@ -62,7 +59,7 @@ class Summary:
             logger.error(f'{e}. Please update caret_analyze.')
 
         if Lttng._last_filters:
-            fi_bt, fi_et = Summary._get_filtered_range(lttng)
+            fi_bt, fi_et = Summary._get_filtered_range(self._lttng)
             msg += (
                 'Filtered trace range    | '
                 f'{fi_bt.strftime("%H:%M:%S")} ~ '
@@ -72,8 +69,8 @@ class Summary:
         msg += '=============================================\n'
         print(msg)
 
-        print(tabulate(summary_df,
-                       summary_df.columns,
+        print(tabulate(self._summary_df,
+                       self._summary_df.columns,
                        tablefmt='presto',
                        showindex=False))
 
@@ -105,8 +102,8 @@ class Summary:
     def _get_filters(
         d_filter_args: Optional[List[float]],
         s_filter_args: Optional[List[float]]
-    ) -> Optional[List[LttngEventFilter]]:
-        filters = []
+    ) -> List[LttngEventFilter]:
+        filters: List[LttngEventFilter] = []
         if d_filter_args:
             filters.append(
                 LttngEventFilter.duration_filter(
@@ -120,4 +117,4 @@ class Summary:
                     s_filter_args[1]
                 ))
 
-        return filters or None
+        return filters

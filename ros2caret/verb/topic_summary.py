@@ -45,4 +45,5 @@ class TopicSummaryVerb(VerbExtension):
         )
 
     def main(self, *, args):
-        Summary(args, 'topic_name')
+        summary = Summary(args, 'topic_name')
+        summary.print_summary()

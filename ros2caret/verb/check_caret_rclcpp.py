@@ -10,7 +10,7 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-# limitations under the License.from caret_analyze import Application, Lttng
+# limitations under the License.
 
 from __future__ import annotations
 
@@ -77,7 +77,7 @@ class RclcppCheck():
             it takes approximately one minute to complete.
         """
 
-        # Check whether at least one CARET fork implementation trace point exists
+        # Check whether at least one CARET fork imple trace point exists
         all_packages = {get_package_name(obj_path)
                         for obj_path
                         in ros_obj_paths}
@@ -90,7 +90,8 @@ class RclcppCheck():
         # Logging
         ng_packages = all_packages - ok_packages
         if ng_packages:
-            msg = 'The following packages have not been built using caret-rclcpp:\n'
+            msg = ('The following packages have not been built '
+                   'using caret-rclcpp:\n')
             for ng_package in ng_packages:
                 msg += f'\t{ng_package}\n'
             logger.warning(msg)
@@ -110,10 +111,12 @@ class RclcppCheck():
     @staticmethod
     def _get_file_paths(dir_path: str) -> List[str]:
         cmd = f'find {dir_path} -type f ! -size 0 -executable \
-                ! -name "*.o"            ! -name "*.cpp"    ! -name "*.make" \
-                ! -name "*.cmake"        ! -name "Makefile" ! -name "*.internal" \
-                ! -name "*.includecache" ! -name "*.in"     ! -name "*.txt" \
-                ! -name "*.a"            ! -name "*.stamp"  ! -name "*.genexp" \
+                ! -name "*.o"            ! -name "*.cpp" \
+                ! -name "*.make"         ! -name "*.cmake" \
+                ! -name "Makefile"       ! -name "*.internal" \
+                ! -name "*.includecache" ! -name "*.in" \
+                ! -name "*.txt"          ! -name "*.a" \
+                ! -name "*.stamp"        ! -name "*.genexp" \
                 ! -name "*.sample"       ! -name "*.py"'
         return (subprocess.Popen(cmd,
                                  stdout=subprocess.PIPE,
@@ -122,7 +125,8 @@ class RclcppCheck():
 
     @staticmethod
     def _has_galactic_tp(obj_path: str) -> bool:
-        cmd = f'nm -D {obj_path} | grep -e {" -e ".join(galactic_tp_symbol_names)}'
+        cmd = (f'nm -D {obj_path} | '
+               f'grep -e {" -e ".join(galactic_tp_symbol_names)}')
         return (subprocess.Popen(cmd,
                                  stdout=subprocess.PIPE,
                                  shell=True).communicate()[0]
@@ -130,7 +134,8 @@ class RclcppCheck():
 
     @staticmethod
     def _has_caret_rclcpp_tp(obj_path: str) -> bool:
-        cmd = f'nm -D {obj_path} | grep -e {" -e ".join(caret_fork_tp_symbol_names)}'
+        cmd = (f'nm -D {obj_path} | '
+               f'grep -e {" -e ".join(caret_fork_tp_symbol_names)}')
         return (subprocess.Popen(cmd,
                                  stdout=subprocess.PIPE,
                                  shell=True
@@ -149,7 +154,8 @@ class RclcppCheck():
             return
 
         logger.error('"build" directory not found. '
-                     'Specify the path to the workspace where the build command completed.')
+                     'Specify the path to the workspace '
+                     'where the build command completed.')
         exit(1)
 
     @staticmethod

@@ -35,6 +35,8 @@ setup(
             'node_summary = ros2caret.verb.node_summary:NodeSummaryVerb',
             'create_architecture_file = \
                     ros2caret.verb.create_architecture:CreateArchitectureVerb',
+            'verify_paths = \
+                    ros2caret.verb.verify_paths:VerifyPathsVerb',
             # 'callback_graph = \
             #       ros2caret.verb.callback_graph:CallbackGraphVerb',
             # 'chain_latency = ros2caret.verb.chain_latency:ChainLatencyVerb',

@@ -26,13 +26,16 @@ setup(
             'ros2caret.verb = ros2caret.verb:VerbExtension'
         ],
         'ros2caret.verb': [
-            'check_caret_rclcpp = ros2caret.verb.check_caret_rclcpp:CheckCaretRclcppVerb',
+            'check_caret_rclcpp = \
+                    ros2caret.verb.check_caret_rclcpp:CheckCaretRclcppVerb',
             'check_ctf = ros2caret.verb.check_ctf:CheckCTFVerb',
-            'trace_point_summary = ros2caret.verb.trace_point_summary:TracePointSummaryVerb',
+            'trace_point_summary = \
+                    ros2caret.verb.trace_point_summary:TracePointSummaryVerb',
             'topic_summary = ros2caret.verb.topic_summary:TopicSummaryVerb',
             'node_summary = ros2caret.verb.node_summary:NodeSummaryVerb',
             # 'architecture = ros2caret.verb.architecture:ArchitectureVerb',
-            # 'callback_graph = ros2caret.verb.callback_graph:CallbackGraphVerb',
+            # 'callback_graph = \
+            #       ros2caret.verb.callback_graph:CallbackGraphVerb',
             # 'chain_latency = ros2caret.verb.chain_latency:ChainLatencyVerb',
             # 'message_flow = ros2caret.verb.message_flow:MessageFlowVerb',
         ]

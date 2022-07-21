@@ -10,7 +10,7 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-# limitations under the License.from caret_analyze import Application, Lttng
+# limitations under the License.
 
 
 from logging import getLogger
@@ -27,7 +27,9 @@ class CheckCTFVerb(VerbExtension):
     def add_arguments(self, parser, cli_name):
         parser.add_argument(
             '-d', '--trace_dir', dest='trace_dir', type=str,
-            help='the path to the trace directory to be checked', required=True)
+            help='the path to the trace directory to be checked',
+            required=True
+        )
 
     def main(self, *, args):
         try:

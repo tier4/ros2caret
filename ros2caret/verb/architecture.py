@@ -10,7 +10,7 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-# limitations under the License.from caret_analyze import Application, Lttng
+# limitations under the License.
 
 from caret_analyze import Application, Lttng
 from ros2caret.verb import VerbExtension
@@ -21,7 +21,9 @@ class ArchitectureVerb(VerbExtension):
     def add_arguments(self, parser, cli_name):
         parser.add_argument(
             '-t', '--trace_directory', dest='trace_directory', type=str,
-            help='the path to the main trace directory results path', required=True)
+            help='the path to the main trace directory results path',
+            required=True
+        )
 
         parser.add_argument(
             '-o', '--output_path', dest='output_path', type=str,

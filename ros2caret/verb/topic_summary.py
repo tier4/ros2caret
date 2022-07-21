@@ -10,13 +10,11 @@
 # distributed under the License is distributed on an "AS IS" BASIS,
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
-# limitations under the License.from caret_analyze import Application, Lttng
+# limitations under the License.
 
-from logging import ERROR, getLogger
-
-from caret_analyze import Lttng
 from ros2caret.verb import VerbExtension
-from tabulate import tabulate
+
+from .summary import Summary
 
 
 class TopicSummaryVerb(VerbExtension):
@@ -24,23 +22,28 @@ class TopicSummaryVerb(VerbExtension):
     def add_arguments(self, parser, cli_name):
         parser.add_argument(
             '-d', '--trace_dir', dest='trace_dir', type=str,
-            help='the path to the trace directory', required=True)
+            help='the path to the trace directory', required=True
+        )
+        parser.add_argument(
+            '--duration_filter', dest='d_filter_args',
+            type=float, nargs='+',
+            help=('Load only this duration from the offset. '
+                  'arg 1: duration [s], arg 2: offset [s]. '),
+            required=False
+        )
+        parser.add_argument(
+            '--strip_filter', dest='s_filter_args',
+            type=float, nargs='+',
+            help=('Ignore trace data for specified seconds from start/end. '
+                  'arg 1: left split [s], arg 2: right split [s]. '),
+            required=False
+        )
         parser.add_argument(
             '-c', '--display_check', dest='display_check', action='store_true',
-            help='display the error checks to the trace results.', required=False)
+            help='display the error checks to the trace results.',
+            required=False
+        )
 
     def main(self, *, args):
-        if(not args.display_check):
-            logger = getLogger()
-            logger.setLevel(ERROR)
-
-        lttng = Lttng(args.trace_dir)
-        topic_count_df = lttng.get_count(groupby=['topic_name']).reset_index()
-        topic_count_df.rename(columns={'size': 'number_of_trace_points'}, inplace=True)
-        topic_count_df = topic_count_df[topic_count_df['topic_name'] != '-']
-
-        print('\n')
-        print(tabulate(topic_count_df,
-                       topic_count_df.columns,
-                       tablefmt='presto',
-                       showindex=False))
+        summary = Summary(args, 'topic_name')
+        summary.print_summary()

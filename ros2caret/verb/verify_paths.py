@@ -13,6 +13,7 @@
 # limitations under the License.
 
 from logging import Formatter, getLogger, INFO, StreamHandler
+from typing import List, Optional
 
 from caret_analyze import Architecture
 
@@ -48,11 +49,27 @@ class VerifyPathsVerb(VerbExtension):
         )
 
     def main(self, *, args):
-        arch = Architecture('yaml', args.arch_path)
-        verified_path_names = args.verified_path_names or arch.path_names
+        verify_paths = VerifyPaths(args.arch_path, args.verified_path_names)
+        verify_paths.verify()
 
-        for path_name in verified_path_names:
+
+class VerifyPaths:
+
+    def __init__(
+        self,
+        arch_path: str,
+        verified_path_names: Optional[List[str]]
+    ) -> None:
+        self._arch = Architecture('yaml', arch_path)
+        self._verified_path_names = (verified_path_names
+                                     or self._arch.path_names)
+
+    def verify(self) -> None:
+        for path_name in self._verified_path_names:
             print(f'\n=============== [{path_name}] ===============')
-            path = arch.get_path(path_name)
+            path = self._arch.get_path(path_name)
             if path.verify():
-                logger.info('No problem.')
+                logger.info(
+                    'No problem. '
+                    f'CARET can calculate the latency of `{path_name}`'
+                )

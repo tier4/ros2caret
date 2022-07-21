@@ -15,8 +15,17 @@
 from logging import Formatter, getLogger, INFO, StreamHandler
 
 import os
+import sys
 
-from caret_analyze import Architecture
+from mock import Mock
+
+try:
+    from caret_analyze import Architecture
+except ModuleNotFoundError:
+    if 'GITHUB_ACTION' in os.environ:
+        sys.modules['caret_analyze.Architecture'] = Mock()
+    else:
+        raise
 
 from ros2caret.verb import VerbExtension
 
@@ -29,6 +38,9 @@ formatter = Formatter(
     fmt,
     datefmt='%Y-%m-%d %H:%M:%S')
 handler.setFormatter(formatter)
+
+root_logger = getLogger()
+root_logger.removeHandler(root_logger.handlers[0])
 
 logger = getLogger(__name__)
 logger.setLevel(INFO)
@@ -49,16 +61,23 @@ class CreateArchitectureVerb(VerbExtension):
         )
 
     def main(self, *, args):
-        CreateArchitecture(args.trace_dir, args.output_path)
+        create_arch = CreateArchitecture(args.trace_dir, args.output_path)
+        create_arch.create()
 
 
 class CreateArchitecture:
 
     def __init__(self, trace_dir: str, output_path: str) -> None:
-        arch = Architecture('lttng', trace_dir)
-        arch.export(output_path)
+        self._arch = Architecture('lttng', trace_dir)
+        self._output_path = output_path
 
-        CreateArchitecture._check_created(output_path)
+    def create(self) -> None:
+        try:
+            self._arch.export(self._output_path)
+        except Exception as e:
+            logger.error(e)
+
+        CreateArchitecture._check_created(self._output_path)
 
     @staticmethod
     def _check_created(output_path: str) -> None:

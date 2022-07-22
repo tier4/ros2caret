@@ -15,17 +15,17 @@
 from logging import Formatter, getLogger, INFO, StreamHandler
 
 import os
-import sys
-
-from mock import Mock
 
 try:
-    from caret_analyze import Architecture
-except ModuleNotFoundError:
+    import caret_analyze
+    Architecture = caret_analyze.Architecture
+    CaretAnalyzeEnabled = True
+except ModuleNotFoundError as e:
     if 'GITHUB_ACTION' in os.environ:
-        sys.modules['caret_analyze.Architecture'] = Mock()
+        Architecture = None
+        CaretAnalyzeEnabled = False
     else:
-        raise
+        raise(e)
 
 from ros2caret.verb import VerbExtension
 
@@ -68,7 +68,8 @@ class CreateArchitectureVerb(VerbExtension):
 class CreateArchitecture:
 
     def __init__(self, trace_dir: str, output_path: str) -> None:
-        self._arch = Architecture('lttng', trace_dir)
+        if CaretAnalyzeEnabled:
+            self._arch = Architecture('lttng', trace_dir)
         self._output_path = output_path
 
     def create(self) -> None:

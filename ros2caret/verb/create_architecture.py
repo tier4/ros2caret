@@ -16,6 +16,8 @@ from logging import Formatter, getLogger, INFO, StreamHandler
 
 import os
 
+from caret_analyze.exceptions import Error
+
 try:
     import caret_analyze
     Architecture = caret_analyze.Architecture
@@ -75,7 +77,7 @@ class CreateArchitecture:
     def create(self) -> None:
         try:
             self._arch.export(self._output_path)
-        except Exception as e:
+        except (OSError, Error) as e:
             logger.error(e)
 
         CreateArchitecture._check_created(self._output_path)

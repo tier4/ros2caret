@@ -24,6 +24,7 @@ try:
 except ModuleNotFoundError as e:
     if 'GITHUB_ACTION' in os.environ:
         Architecture = None
+        Error = None
         CaretAnalyzeEnabled = False
     else:
         raise(e)

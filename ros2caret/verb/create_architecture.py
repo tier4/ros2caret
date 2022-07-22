@@ -16,11 +16,10 @@ from logging import Formatter, getLogger, INFO, StreamHandler
 
 import os
 
-from caret_analyze.exceptions import Error
-
 try:
     import caret_analyze
     Architecture = caret_analyze.Architecture
+    Error = caret_analyze.exceptions.Error
     CaretAnalyzeEnabled = True
 except ModuleNotFoundError as e:
     if 'GITHUB_ACTION' in os.environ:
@@ -77,6 +76,8 @@ class CreateArchitecture:
     def create(self) -> None:
         try:
             self._arch.export(self._output_path)
+        except FileExistsError as e:
+            raise(e)
         except (OSError, Error) as e:
             logger.error(e)
 

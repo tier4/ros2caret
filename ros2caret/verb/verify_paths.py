@@ -13,9 +13,19 @@
 # limitations under the License.
 
 from logging import Formatter, getLogger, INFO, StreamHandler
+import os
 from typing import List, Optional
 
-from caret_analyze import Architecture
+try:
+    import caret_analyze
+    Architecture = caret_analyze.Architecture
+    CaretAnalyzeEnabled = True
+except ModuleNotFoundError as e:
+    if 'GITHUB_ACTION' in os.environ:
+        Architecture = None
+        CaretAnalyzeEnabled = False
+    else:
+        raise(e)
 
 from ros2caret.verb import VerbExtension
 
@@ -49,8 +59,8 @@ class VerifyPathsVerb(VerbExtension):
         )
 
     def main(self, *, args):
-        verify_paths = VerifyPaths(args.arch_path, args.verified_path_names)
-        verify_paths.verify()
+        verify_paths = VerifyPaths(args.arch_path)
+        verify_paths.verify(args.verified_path_names)
 
 
 class VerifyPaths:
@@ -58,14 +68,21 @@ class VerifyPaths:
     def __init__(
         self,
         arch_path: str,
+        architecture: Optional[Architecture] = None
+    ) -> None:
+        if CaretAnalyzeEnabled:
+            self._arch = Architecture('yaml', arch_path)
+        else:
+            self._arch = architecture
+
+    def verify(
+        self,
         verified_path_names: Optional[List[str]]
     ) -> None:
-        self._arch = Architecture('yaml', arch_path)
-        self._verified_path_names = (verified_path_names
-                                     or self._arch.path_names)
+        verified_path_names = (verified_path_names
+                               or self._arch.path_names)
 
-    def verify(self) -> None:
-        for path_name in self._verified_path_names:
+        for path_name in verified_path_names:
             print(f'\n=============== [{path_name}] ===============')
             path = self._arch.get_path(path_name)
             if path.verify():

@@ -15,6 +15,7 @@
 from logging import Formatter, getLogger, INFO, StreamHandler
 
 import os
+from typing import Optional
 
 try:
     import caret_analyze
@@ -61,33 +62,34 @@ class CreateArchitectureVerb(VerbExtension):
             help='the path to the output architecture file',
             required=False, default='./architecture.yaml'
         )
+        parser.add_argument(
+            '-f', '--force', dest='force', type=bool,
+            help='allow overwrite of architecture file',
+            required=False, default=False
+        )
 
     def main(self, *, args):
-        create_arch = CreateArchitecture(args.trace_dir, args.output_path)
-        create_arch.create()
+        create_arch = CreateArchitecture(args.trace_dir)
+        create_arch.create(args.output_path, args.force)
 
 
 class CreateArchitecture:
 
-    def __init__(self, trace_dir: str, output_path: str) -> None:
+    def __init__(
+        self,
+        trace_dir: str,
+        architecture: Optional[Architecture] = None
+    ) -> None:
         if CaretAnalyzeEnabled:
             self._arch = Architecture('lttng', trace_dir)
-        self._output_path = output_path
+        else:
+            self._arch = architecture
 
-    def create(self) -> None:
+    def create(self, output_path: str, force: bool) -> None:
         try:
-            self._arch.export(self._output_path)
-        except FileExistsError as e:
-            raise(e)
+            self._arch.export(output_path, force)
         except (OSError, Error) as e:
-            logger.error(e)
-
-        CreateArchitecture._check_created(self._output_path)
-
-    @staticmethod
-    def _check_created(output_path: str) -> None:
-        if os.path.exists(output_path):
+            logger.error(f'{e} Failed to create architecture file.')
+        else:
             logger.info('Architecture file successfully created. '
                         f'PATH: {os.path.abspath(output_path)}')
-        else:
-            logger.error('Failed to create architecture file.')

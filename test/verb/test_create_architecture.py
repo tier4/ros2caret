@@ -19,16 +19,24 @@ from ros2caret.verb.create_architecture import CreateArchitecture
 
 class TestCreateArchitecture:
 
-    def test_check_created_exist_case(self, caplog, mocker):
-        mocker.patch('os.path.exists', return_value=True)
-        CreateArchitecture._check_created('')
+    def test_create_success_case(self, caplog, mocker):
+        architecture_mock = mocker.Mock()
+        mocker.patch.object(architecture_mock, 'export', return_value=None)
+        create_arch = CreateArchitecture('', architecture_mock)
+
+        create_arch.create('output_path', True)
         assert len(caplog.records) == 1
         record = caplog.records[0]
         assert record.levelno == INFO
 
-    def test_check_created_not_exist_case(self, caplog, mocker):
-        mocker.patch('os.path.exists', return_value=False)
-        CreateArchitecture._check_created('')
+    def test_create_fail_case(self, caplog, mocker):
+        architecture_mock = mocker.Mock()
+        mocker.patch.object(architecture_mock,
+                            'export',
+                            side_effect=OSError(''))
+        create_arch = CreateArchitecture('', architecture_mock)
+
+        create_arch.create('output_path', True)
         assert len(caplog.records) == 1
         record = caplog.records[0]
         assert record.levelno == ERROR

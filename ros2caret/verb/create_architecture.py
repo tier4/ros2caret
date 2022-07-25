@@ -21,11 +21,12 @@ try:
     import caret_analyze
     Architecture = caret_analyze.Architecture
     Error = caret_analyze.exceptions.Error
+    CatchErrors = (OSError, Error)
     CaretAnalyzeEnabled = True
 except ModuleNotFoundError as e:
     if 'GITHUB_ACTION' in os.environ:
         Architecture = None
-        Error = None
+        CatchErrors = OSError
         CaretAnalyzeEnabled = False
     else:
         raise(e)
@@ -88,7 +89,7 @@ class CreateArchitecture:
     def create(self, output_path: str, force: bool) -> None:
         try:
             self._arch.export(output_path, force)
-        except (OSError, Error) as e:
+        except CatchErrors as e:
             logger.error(f'{e} Failed to create architecture file.')
         else:
             logger.info('Architecture file successfully created. '

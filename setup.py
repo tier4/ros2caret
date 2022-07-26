@@ -33,7 +33,10 @@ setup(
                     ros2caret.verb.trace_point_summary:TracePointSummaryVerb',
             'topic_summary = ros2caret.verb.topic_summary:TopicSummaryVerb',
             'node_summary = ros2caret.verb.node_summary:NodeSummaryVerb',
-            # 'architecture = ros2caret.verb.architecture:ArchitectureVerb',
+            'create_architecture_file = \
+                    ros2caret.verb.create_architecture:CreateArchitectureVerb',
+            'verify_paths = \
+                    ros2caret.verb.verify_paths:VerifyPathsVerb',
             # 'callback_graph = \
             #       ros2caret.verb.callback_graph:CallbackGraphVerb',
             # 'chain_latency = ros2caret.verb.chain_latency:ChainLatencyVerb',

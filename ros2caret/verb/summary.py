@@ -41,6 +41,7 @@ class Summary:
                                     args.s_filter_args)
         self._lttng = Lttng(args.trace_dir, event_filters=filters)
         self._summary_df = self._get_summary_df(self._lttng, groupby)
+        self._filtered = len(filters) > 0
 
     def print_summary(
         self
@@ -58,7 +59,7 @@ class Summary:
         except AttributeError as e:
             logger.error(f'{e}. Please update caret_analyze.')
 
-        if Lttng._last_filters:
+        if self._filtered:
             fi_bt, fi_et = Summary._get_filtered_range(self._lttng)
             msg += (
                 'Filtered trace range    | '

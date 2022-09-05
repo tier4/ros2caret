@@ -38,7 +38,7 @@ class Summary:
             root_logger.setLevel(ERROR)
 
         # NOTE: what happen if len(args.d_filter_args) > 2?
-        # It look good to remove filter arguemts, if there are no use-cases to use them.
+        # It look good to remove filter arguments, if there are no use-cases to use them.
 
         filters = self._get_filters(args.d_filter_args,
                                     args.s_filter_args)

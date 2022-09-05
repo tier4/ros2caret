@@ -20,6 +20,7 @@ from .summary import Summary
 class NodeSummaryVerb(VerbExtension):
 
     def add_arguments(self, parser, cli_name):
+        # NOTE: It looks good to remove '-d', '--trace_dir', since the arguemt is required.
         parser.add_argument(
             '-d', '--trace_dir', dest='trace_dir', type=str,
             help='the path to the trace directory', required=True

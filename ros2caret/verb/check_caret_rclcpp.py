@@ -48,6 +48,8 @@ class CheckCaretRclcppVerb(VerbExtension):
         root_dir_path = args.workspace + '/build/'
         RclcppCheck(root_dir_path)
 
+# NOTE: It looks good to move symbol check to caret_analyze.
+# Just call caret_analyze's API in ros2caret.
 
 galactic_tp_symbol_names = [
     'ros_trace_rclcpp_publish'

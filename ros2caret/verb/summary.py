@@ -37,6 +37,9 @@ class Summary:
             root_logger = getLogger()
             root_logger.setLevel(ERROR)
 
+        # NOTE: what happen if len(args.d_filter_args) > 2?
+        # It look good to remove filter arguemts, if there are no use-cases to use them.
+
         filters = self._get_filters(args.d_filter_args,
                                     args.s_filter_args)
         self._lttng = Lttng(args.trace_dir, event_filters=filters)
@@ -48,6 +51,7 @@ class Summary:
         msg = '=============================================\n'
 
         try:
+            # FIXME: Index access is difficult to understand what is being done.
             msg += ('Trace creation datetime | '
                     f'{str(self._lttng.get_trace_creation_datetime())[:-7]}\n')
             bt, et = self._lttng.get_trace_range()

@@ -51,6 +51,7 @@ class CheckCaretRclcppVerb(VerbExtension):
 # NOTE: It looks good to move symbol check to caret_analyze.
 # Just call caret_analyze's API in ros2caret.
 
+
 galactic_tp_symbol_names = [
     'ros_trace_rclcpp_publish'
     'ros_trace_rclcpp_subscription_init',

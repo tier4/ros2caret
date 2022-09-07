@@ -18,3 +18,7 @@
   files:
     - source: .github/workflows/github-release.yaml
     - source: cliff.toml
+
+- repository: tier4/caret_common
+  files:
+    - source: .cspell.json

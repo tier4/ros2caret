@@ -37,7 +37,7 @@ class RecordVerb(VerbExtension):
             '(default: %(default)s)')
         parser.add_argument(
             '-v', '--verbose', dest='verbose', action='store_true',
-            help='dieplay status of recording')
+            help='display status of recording')
 
     def main(self, *, args):
         events_ust = ['ros*']

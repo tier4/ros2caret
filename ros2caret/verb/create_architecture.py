@@ -22,12 +22,10 @@ try:
     Architecture = caret_analyze.Architecture
     Error = caret_analyze.exceptions.Error
     CatchErrors = (OSError, Error)
-    CaretAnalyzeEnabled = True
 except ModuleNotFoundError as e:
     if 'GITHUB_ACTION' in os.environ:
         Architecture = None
         CatchErrors = OSError
-        CaretAnalyzeEnabled = False
     else:
         raise(e)
 
@@ -81,10 +79,10 @@ class CreateArchitecture:
         trace_dir: str,
         architecture: Optional[Architecture] = None
     ) -> None:
-        if CaretAnalyzeEnabled:
-            self._arch = Architecture('lttng', trace_dir)
-        else:
+        if architecture:
             self._arch = architecture
+        else:
+            self._arch = Architecture('lttng', trace_dir)
 
     def create(self, output_path: str, force: bool) -> None:
         try:

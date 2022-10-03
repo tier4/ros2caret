@@ -19,11 +19,9 @@ from typing import List, Optional
 try:
     import caret_analyze
     Architecture = caret_analyze.Architecture
-    CaretAnalyzeEnabled = True
 except ModuleNotFoundError as e:
     if 'GITHUB_ACTION' in os.environ:
         Architecture = None
-        CaretAnalyzeEnabled = False
     else:
         raise(e)
 
@@ -70,10 +68,10 @@ class VerifyPaths:
         arch_path: str,
         architecture: Optional[Architecture] = None
     ) -> None:
-        if CaretAnalyzeEnabled:
-            self._arch = Architecture('yaml', arch_path)
-        else:
+        if architecture:
             self._arch = architecture
+        else:
+            self._arch = Architecture('yaml', arch_path)
 
     def verify(
         self,

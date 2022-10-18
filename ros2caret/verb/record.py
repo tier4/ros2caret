@@ -44,17 +44,19 @@ class RecordVerb(VerbExtension):
         context_fields = names.DEFAULT_CONTEXT
         events_kernel = []
 
+        # Note: since key name of context_fields differs in galactic and humble,
+        # here, arguments are given as tuple.
         init(
-            session_name=args.session_name,
-            base_path=args.path,
-            ros_events=events_ust,
-            kernel_events=events_kernel,
-            context_fields=context_fields,
-            display_list=args.list,
+            args.session_name,
+            args.path,
+            events_ust,
+            events_kernel,
+            context_fields,
+            args.list,
         )
 
         fini(
-            session_name=args.session_name,
+            args.session_name,
         )
 
         return 0

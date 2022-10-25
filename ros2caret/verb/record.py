@@ -12,6 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+
 from ros2caret.verb import VerbExtension
 
 from tracetools_trace.tools import names, path
@@ -44,19 +46,19 @@ class RecordVerb(VerbExtension):
         context_fields = names.DEFAULT_CONTEXT
         events_kernel = []
 
-        # Note: since key name of context_fields differs in galactic and humble,
-        # here, arguments are given as tuple.
-        init(
-            args.session_name,
-            args.path,
-            events_ust,
-            events_kernel,
-            context_fields,
-            args.list,
-        )
+        init_args = {}
+        init_args['session_name'] = args.session_name
+        init_args['base_path'] = args.path
+        init_args['ros_events'] = events_ust
+        init_args['kernel_events'] = events_kernel
+        # Note: key name of context_fields differs in galactic and humble,
+        if os.environ['ROS_DISTRO'] == 'galactic':
+            init_args['context_names'] = context_fields
+        else:
+            init_args['context_fields'] = context_fields
+        init_args['display_list'] = args.list
 
-        fini(
-            args.session_name,
-        )
+        init(**init_args)
+        fini(session_name=args.session_name)
 
         return 0

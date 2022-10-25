@@ -120,7 +120,12 @@ class RclcppCheck():
                 ! -name "*.includecache" ! -name "*.in" \
                 ! -name "*.txt"          ! -name "*.a" \
                 ! -name "*.stamp"        ! -name "*.genexp" \
-                ! -name "*.sample"       ! -name "*.py"'
+                ! -name "*.sample"       ! -name "*.py" \
+                ! -name "*.cu"           ! -name "*.sh" \
+                ! -name "*.md"           ! -name "polygraphy" \
+                ! -name "*.jpg"          ! -name "*.ipynb" \
+                ! -name "*.png"'
+
         return (subprocess.Popen(cmd,
                                  stdout=subprocess.PIPE,
                                  shell=True).communicate()[0]

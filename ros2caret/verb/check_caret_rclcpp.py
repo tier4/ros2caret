@@ -135,20 +135,24 @@ class RclcppCheck():
     def _has_galactic_tp(obj_path: str) -> bool:
         cmd = (f'nm -D {obj_path} | '
                f'grep -e {" -e ".join(galactic_tp_symbol_names)}')
-        return (subprocess.Popen(cmd,
-                                 stdout=subprocess.PIPE,
-                                 shell=True).communicate()[0]
-                )
+        stdout = (subprocess.Popen(cmd,
+                                   stdout=subprocess.PIPE,
+                                   shell=True).communicate()[0]
+                  )
+
+        return True if stdout else False
 
     @staticmethod
     def _has_caret_rclcpp_tp(obj_path: str) -> bool:
         cmd = (f'nm -D {obj_path} | '
                f'grep -e {" -e ".join(caret_fork_tp_symbol_names)}')
-        return (subprocess.Popen(cmd,
-                                 stdout=subprocess.PIPE,
-                                 shell=True
-                                 ).communicate()[0]
-                ).decode('utf-8')
+        stdout = (subprocess.Popen(cmd,
+                                   stdout=subprocess.PIPE,
+                                   shell=True
+                                   ).communicate()[0]
+                  ).decode('utf-8')
+
+        return True if stdout else False
 
     @staticmethod
     def _create_get_package_name(root_dir_path: str) -> Callable[[str], bool]:

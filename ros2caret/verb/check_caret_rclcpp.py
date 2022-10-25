@@ -123,9 +123,8 @@ class RclcppCheck():
                 ! -name "*.sample"       ! -name "*.py" \
                 ! -name "*.cu"           ! -name "*.sh" \
                 ! -name "*.md"           ! -name "polygraphy" \
-                ! -name "*.jpg"          ! -name "*.ipynb" \
-                ! -name "*.png"'
-
+                ! -name "gen-data"       ! -name "*.ipynb" \
+                ! -name "*.png"          ! -name "*.jpg"'
         return (subprocess.Popen(cmd,
                                  stdout=subprocess.PIPE,
                                  shell=True).communicate()[0]

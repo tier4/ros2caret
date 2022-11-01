@@ -16,9 +16,64 @@ import os
 
 from ros2caret.verb import VerbExtension
 
+import rclpy
+from tqdm import tqdm
+
+from rclpy.node import Node
 from tracetools_trace.tools import names, path
 from tracetools_trace.trace import fini
 from tracetools_trace.trace import init
+
+from caret_msgs.msg import Start, Status, End
+
+
+class CaretSessionNode(Node):
+
+    def __init__(self):
+        super().__init__('caret_session_node')
+        self._start_pub_ = self.create_publisher(Start, '/caret/start_record', 10)
+        self._end_pub_ = self.create_publisher(End, '/caret/end_record', 10)
+        self._sub = self.create_subscription(
+            Status, '/caret/status', self.subscription_callback, 100)
+        self._node_names = set()
+        self._progress = None
+        self.started = False
+
+    def subscription_callback(self, msg):
+        if msg.node_name in self._node_names:
+            self._node_names.remove(msg.node_name)
+
+        if self._progress:
+            self._progress.update()
+
+        if len(self._node_names) == 0:
+            if self._progress:
+                self._progress.close()
+            print('All process started recording.')
+            self.started = True
+
+    def start(self, verbose: bool):
+        all_node_names = self.get_node_names()
+        # NOTE: caret_trace creates nodes with the name caret_trace_[pid].
+        self._node_names = {
+            node_name
+            for node_name
+            in all_node_names
+            if 'caret_trace_' in node_name
+        }
+        caret_node_num = len(self._node_names)
+        print(f'{caret_node_num} recordable processes found.',)
+        if verbose:
+            self._progress = tqdm(
+                total=caret_node_num,
+                bar_format='{n}/{total} process started recording', leave=True)
+
+        msg = Start()
+        self._start_pub_.publish(msg)
+
+    def end(self):
+        msg = End()
+        self._end_pub_.publish(msg)
 
 
 class RecordVerb(VerbExtension):
@@ -43,8 +98,11 @@ class RecordVerb(VerbExtension):
 
     def main(self, *, args):
         events_ust = ['ros*']
-        context_fields = names.DEFAULT_CONTEXT
+        context_names = names.DEFAULT_CONTEXT
         events_kernel = []
+
+        rclpy.init()
+        node = CaretSessionNode()
 
         init_args = {}
         init_args['session_name'] = args.session_name
@@ -53,12 +111,17 @@ class RecordVerb(VerbExtension):
         init_args['kernel_events'] = events_kernel
         # Note: key name of context_fields differs in galactic and humble,
         if os.environ['ROS_DISTRO'] == 'galactic':
-            init_args['context_names'] = context_fields
+            init_args['context_names'] = context_names
         else:
-            init_args['context_fields'] = context_fields
+            init_args['context_fields'] = context_names
         init_args['display_list'] = args.list
-
         init(**init_args)
+
+        node.start(args.verbose)
+        while not node.started:
+            rclpy.spin_once(node)
+
         fini(session_name=args.session_name)
+        node.end()
 
         return 0

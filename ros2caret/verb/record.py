@@ -14,17 +14,17 @@
 
 import os
 
-from ros2caret.verb import VerbExtension
+from caret_msgs.msg import End, Start, Status
 
 import rclpy
+from rclpy.node import Node
+
+from ros2caret.verb import VerbExtension
 from tqdm import tqdm
 
-from rclpy.node import Node
 from tracetools_trace.tools import names, path
 from tracetools_trace.trace import fini
 from tracetools_trace.trace import init
-
-from caret_msgs.msg import Start, Status, End
 
 
 class CaretSessionNode(Node):

@@ -62,7 +62,7 @@ class CreateArchitectureVerb(VerbExtension):
             required=False, default='./architecture.yaml'
         )
         parser.add_argument(
-            '-f', '--force', dest='force', type=bool,
+            '-f', '--force', dest='force', action='store_true',
             help='allow overwrite of architecture file',
             required=False, default=False
         )

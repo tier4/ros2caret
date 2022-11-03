@@ -139,7 +139,7 @@ class RclcppCheck():
                                    shell=True).communicate()[0]
                   )
 
-        return True if stdout else False
+        return bool(stdout)
 
     @staticmethod
     def _has_caret_rclcpp_tp(obj_path: str) -> bool:
@@ -151,7 +151,7 @@ class RclcppCheck():
                                    ).communicate()[0]
                   ).decode('utf-8')
 
-        return True if stdout else False
+        return bool(stdout)
 
     @staticmethod
     def _create_get_package_name(root_dir_path: str) -> Callable[[str], bool]:

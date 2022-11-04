@@ -52,7 +52,7 @@ class CaretSessionNode(Node):
             print('All process started recording.')
             self.started = True
 
-    def start(self, verbose: bool):
+    def start(self, verbose: bool) -> int:
         all_node_names = self.get_node_names()
         # NOTE: caret_trace creates nodes with the name caret_trace_[pid].
         self._node_names = {
@@ -62,7 +62,8 @@ class CaretSessionNode(Node):
             if 'caret_trace_' in node_name
         }
         caret_node_num = len(self._node_names)
-        print(f'{caret_node_num} recordable processes found.',)
+        if caret_node_num > 0:
+            print(f'{caret_node_num} recordable processes found.')
         if verbose:
             self._progress = tqdm(
                 total=caret_node_num,
@@ -70,6 +71,7 @@ class CaretSessionNode(Node):
 
         msg = Start()
         self._start_pub_.publish(msg)
+        return caret_node_num
 
     def end(self):
         msg = End()
@@ -117,8 +119,8 @@ class RecordVerb(VerbExtension):
         init_args['display_list'] = args.list
         init(**init_args)
 
-        node.start(args.verbose)
-        while not node.started:
+        recordable_node_num = node.start(args.verbose)
+        while not node.started and recordable_node_num > 0:
             rclpy.spin_once(node)
 
         fini(session_name=args.session_name)

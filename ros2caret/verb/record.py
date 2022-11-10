@@ -35,18 +35,18 @@ class CaretSessionNode(Node):
         self._end_pub_ = self.create_publisher(End, '/caret/end_record', 10)
         self._sub = self.create_subscription(
             Status, '/caret/status', self.subscription_callback, 100)
-        self._node_names = set()
+        self._caret_node_names = set()
         self._progress = None
         self.started = False
 
     def subscription_callback(self, msg):
-        if msg.node_name in self._node_names:
-            self._node_names.remove(msg.node_name)
+        if msg.node_name in self._caret_node_names:
+            self._caret_node_names.remove(msg.node_name)
 
         if self._progress:
             self._progress.update()
 
-        if len(self._node_names) == 0:
+        if len(self._caret_node_names) == 0:
             if self._progress:
                 self._progress.close()
             print('All process started recording.')
@@ -55,13 +55,13 @@ class CaretSessionNode(Node):
     def start(self, verbose: bool) -> int:
         all_node_names = self.get_node_names()
         # NOTE: caret_trace creates nodes with the name caret_trace_[pid].
-        self._node_names = {
+        self._caret_node_names = {
             node_name
             for node_name
             in all_node_names
             if 'caret_trace_' in node_name
         }
-        caret_node_num = len(self._node_names)
+        caret_node_num = len(self._caret_node_names)
         if caret_node_num > 0:
             print(f'{caret_node_num} recordable processes found.')
         if verbose:

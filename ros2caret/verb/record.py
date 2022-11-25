@@ -40,6 +40,9 @@ class CaretSessionNode(Node):
         self.started = False
 
     def subscription_callback(self, msg):
+        if msg.status != Status.RECORD:
+            return
+
         if msg.node_name in self._caret_node_names:
             self._caret_node_names.remove(msg.node_name)
 

@@ -14,6 +14,8 @@
 
 import os
 
+from typing import Optional
+
 from caret_msgs.msg import End, Start, Status
 
 import rclpy
@@ -55,7 +57,11 @@ class CaretSessionNode(Node):
             print('All process started recording.')
             self.started = True
 
-    def start(self, verbose: bool) -> int:
+    def start(
+        self,
+        verbose: bool,
+        recording_frequency: Optional[str] = None
+    ) -> int:
         all_node_names = self.get_node_names()
         # NOTE: caret_trace creates nodes with the name caret_trace_[pid].
         self._caret_node_names = {
@@ -73,6 +79,7 @@ class CaretSessionNode(Node):
                 bar_format='{n}/{total} process started recording', leave=True)
 
         msg = Start()
+        msg.recording_frequency = 100 if recording_frequency is None else int(recording_frequency)
         self._start_pub_.publish(msg)
         return caret_node_num
 
@@ -100,6 +107,11 @@ class RecordVerb(VerbExtension):
         parser.add_argument(
             '-v', '--verbose', dest='verbose', action='store_true',
             help='display status of recording')
+        parser.add_argument(
+            '-f', '--recording-frequency', dest='recording_frequency',
+            help=('recording frequency for Initialization-related trace points (default: 100Hz). '
+                  'Higher frequencies allow recording in a shorter time. '
+                  'However, the possibility of recording failure increases. '))
 
     def main(self, *, args):
         events_ust = ['ros*']
@@ -122,7 +134,7 @@ class RecordVerb(VerbExtension):
         init_args['display_list'] = args.list
         init(**init_args)
 
-        recordable_node_num = node.start(args.verbose)
+        recordable_node_num = node.start(args.verbose, args.recording_frequency)
         while not node.started and recordable_node_num > 0:
             rclpy.spin_once(node)
 

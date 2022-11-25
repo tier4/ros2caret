@@ -133,7 +133,7 @@ class RclcppCheck():
 
     @staticmethod
     def _has_galactic_tp(obj_path: str) -> bool:
-        cmd = (f'nm -D {obj_path} | '
+        cmd = (f'nm -D {obj_path} 2> /dev/null | '
                f'grep -e {" -e ".join(galactic_tp_symbol_names)}')
         stdout = (subprocess.Popen(cmd,
                                    stdout=subprocess.PIPE,
@@ -144,7 +144,7 @@ class RclcppCheck():
 
     @staticmethod
     def _has_caret_rclcpp_tp(obj_path: str) -> bool:
-        cmd = (f'nm -D {obj_path} | '
+        cmd = (f'nm -D {obj_path} 2> /dev/null | '
                f'grep -e {" -e ".join(caret_fork_tp_symbol_names)}')
         stdout = (subprocess.Popen(cmd,
                                    stdout=subprocess.PIPE,

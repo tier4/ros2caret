@@ -19,6 +19,7 @@ from typing import Optional
 from caret_msgs.msg import End, Start, Status
 
 import rclpy
+from rclpy import qos
 from rclpy.node import Node
 
 from ros2caret.verb import VerbExtension
@@ -33,10 +34,24 @@ class CaretSessionNode(Node):
 
     def __init__(self):
         super().__init__('caret_session_node')
-        self._start_pub_ = self.create_publisher(Start, '/caret/start_record', 10)
-        self._end_pub_ = self.create_publisher(End, '/caret/end_record', 10)
+        pub_qos = qos.QoSProfile(
+            history=qos.HistoryPolicy.KEEP_LAST,
+            depth=1,
+            reliability=qos.ReliabilityPolicy.RELIABLE,
+            durability=qos.DurabilityPolicy.VOLATILE
+        )
+        self._start_pub_ = self.create_publisher(
+            Start, '/caret/start_record', pub_qos)
+        self._end_pub_ = self.create_publisher(
+            End, '/caret/end_record', pub_qos)
+
+        sub_qos = qos.QoSProfile(
+            history=qos.HistoryPolicy.KEEP_ALL,
+            reliability=qos.ReliabilityPolicy.RELIABLE,
+            durability=qos.DurabilityPolicy.VOLATILE
+        )
         self._sub = self.create_subscription(
-            Status, '/caret/status', self.subscription_callback, 100)
+            Status, '/caret/status', self.subscription_callback, sub_qos)
         self._caret_node_names = set()
         self._progress = None
         self.started = False

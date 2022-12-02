@@ -25,8 +25,8 @@ from rclpy.node import Node
 from ros2caret.verb import VerbExtension
 from tqdm import tqdm
 
-from tracetools_trace.tools import names, path
-from tracetools_trace.trace import fini
+from tracetools_trace.tools import lttng, names, path
+from tracetools_trace.tools.signals import execute_and_handle_sigint
 from tracetools_trace.trace import init
 
 
@@ -67,10 +67,13 @@ class CaretSessionNode(Node):
             self._progress.update()
 
         if len(self._caret_node_names) == 0:
-            if self._progress:
-                self._progress.close()
+            self.stop_progress()
             print('All process started recording.')
             self.started = True
+
+    def stop_progress(self):
+        if self._progress:
+            self._progress.close()
 
     def start(
         self,
@@ -149,11 +152,18 @@ class RecordVerb(VerbExtension):
         init_args['display_list'] = args.list
         init(**init_args)
 
-        recordable_node_num = node.start(args.verbose, args.recording_frequency)
-        while not node.started and recordable_node_num > 0:
-            rclpy.spin_once(node)
+        def _run():
+            recordable_node_num = node.start(args.verbose, args.recording_frequency)
+            while not node.started and recordable_node_num > 0:
+                rclpy.spin_once(node)
+            input('press enter to stop...')
 
-        fini(session_name=args.session_name)
-        node.end()
+        def _fini():
+            node.stop_progress()
+            node.end()
+            print('stopping & destroying tracing session')
+            lttng.lttng_fini(session_name=args.session_name)
+
+        execute_and_handle_sigint(_run, _fini)
 
         return 0

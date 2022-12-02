@@ -60,8 +60,8 @@ class CaretSessionNode(Node):
         if msg.status != Status.RECORD:
             return
 
-        if msg.node_name in self._caret_node_names:
-            self._caret_node_names.remove(msg.node_name)
+        if msg.caret_node_name in self._caret_node_names:
+            self._caret_node_names.remove(msg.caret_node_name)
 
         if self._progress:
             self._progress.update()

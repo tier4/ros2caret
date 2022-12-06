@@ -80,7 +80,7 @@ class RclcppCheck():
             it takes approximately one minute to complete.
         """
 
-        # Check whether at least one CARET fork imple trace point exists
+        # Check whether at least one CARET fork implemented trace point exists
         all_packages = {get_package_name(obj_path)
                         for obj_path
                         in ros_obj_paths}

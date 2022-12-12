@@ -15,17 +15,17 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y software-properties-common
-          sudo apt-add-repository ppa:lttng/stable-2.12
+          sudo apt-add-repository ppa:lttng/stable-2.13
           sudo apt-get update
           sudo apt-get install -y python3-babeltrace python3-lttng python3-bt2
         shell: bash
 
       - name: Install test packages
         run: |
-          sudo apt install -y ros-galactic-ament-copyright
-          sudo apt install -y ros-galactic-ament-flake8
-          sudo apt install -y ros-galactic-ament-pep257
-          sudo apt install -y ros-galactic-ament-mypy
+          sudo apt install -y ros-humble-ament-copyright
+          sudo apt install -y ros-humble-ament-flake8
+          sudo apt install -y ros-humble-ament-pep257
+          sudo apt install -y ros-humble-ament-mypy
           sudo apt install -y python3-pytest-mock
         shell: bash
 
@@ -45,5 +45,5 @@ jobs:
 
       - name: Run pytest
         run: |
-          . /opt/ros/galactic/setup.sh
+          . /opt/ros/humble/setup.sh
           python3 -m pytest

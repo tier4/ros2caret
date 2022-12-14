@@ -52,7 +52,7 @@ class CheckCaretRclcppVerb(VerbExtension):
 # Just call caret_analyze's API in ros2caret.
 
 
-galactic_tp_symbol_names = [
+ros_builtin_tp_symbol_names = [
     'ros_trace_rclcpp_publish'
     'ros_trace_rclcpp_subscription_init',
     'ros_trace_rclcpp_subscription_callback_added',
@@ -80,7 +80,7 @@ class RclcppCheck():
             it takes approximately one minute to complete.
         """
 
-        # Check whether at least one CARET fork imple trace point exists
+        # Check whether at least one CARET fork implemented trace point exists
         all_packages = {get_package_name(obj_path)
                         for obj_path
                         in ros_obj_paths}
@@ -105,11 +105,11 @@ class RclcppCheck():
     def _get_obj_paths(root_dir_path: str) -> Set[str]:
         filtered_file_paths = RclcppCheck._get_file_paths(root_dir_path)
 
-        # Check whether at least one galactic implementation trace point exists
+        # Check whether at least one ros implemented trace point exists
         return {path
                 for path
                 in filtered_file_paths
-                if RclcppCheck._has_galactic_tp(path)}
+                if RclcppCheck._has_ros_builtin_tp(path)}
 
     @staticmethod
     def _get_file_paths(dir_path: str) -> List[str]:
@@ -132,9 +132,9 @@ class RclcppCheck():
                 ).decode('utf-8').split('\n')[:-1]
 
     @staticmethod
-    def _has_galactic_tp(obj_path: str) -> bool:
+    def _has_ros_builtin_tp(obj_path: str) -> bool:
         cmd = (f'nm -D {obj_path} 2> /dev/null | '
-               f'grep -e {" -e ".join(galactic_tp_symbol_names)}')
+               f'grep -e {" -e ".join(ros_builtin_tp_symbol_names)}')
         stdout = (subprocess.Popen(cmd,
                                    stdout=subprocess.PIPE,
                                    shell=True).communicate()[0]

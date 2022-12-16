@@ -14,11 +14,96 @@
 
 import os
 
-from ros2caret.verb import VerbExtension
+from typing import Optional
 
-from tracetools_trace.tools import names, path
-from tracetools_trace.trace import fini
+from caret_msgs.msg import End, Start, Status
+
+import rclpy
+from rclpy import qos
+from rclpy.node import Node
+
+from ros2caret.verb import VerbExtension
+from tqdm import tqdm
+
+from tracetools_trace.tools import lttng, names, path
+from tracetools_trace.tools.signals import execute_and_handle_sigint
 from tracetools_trace.trace import init
+
+
+class CaretSessionNode(Node):
+
+    def __init__(self):
+        super().__init__('caret_session_node')
+        pub_qos = qos.QoSProfile(
+            history=qos.HistoryPolicy.KEEP_LAST,
+            depth=1,
+            reliability=qos.ReliabilityPolicy.RELIABLE,
+            durability=qos.DurabilityPolicy.VOLATILE
+        )
+        self._start_pub_ = self.create_publisher(
+            Start, '/caret/start_record', pub_qos)
+        self._end_pub_ = self.create_publisher(
+            End, '/caret/end_record', pub_qos)
+
+        sub_qos = qos.QoSProfile(
+            history=qos.HistoryPolicy.KEEP_ALL,
+            reliability=qos.ReliabilityPolicy.RELIABLE,
+            durability=qos.DurabilityPolicy.VOLATILE
+        )
+        self._sub = self.create_subscription(
+            Status, '/caret/status', self.subscription_callback, sub_qos)
+        self._caret_node_names = set()
+        self._progress = None
+        self.started = False
+
+    def subscription_callback(self, msg):
+        if msg.status != Status.RECORD:
+            return
+
+        if msg.caret_node_name in self._caret_node_names:
+            self._caret_node_names.remove(msg.caret_node_name)
+
+        if self._progress:
+            self._progress.update()
+
+        if len(self._caret_node_names) == 0:
+            self.stop_progress()
+            print('All process started recording.')
+            self.started = True
+
+    def stop_progress(self):
+        if self._progress:
+            self._progress.close()
+
+    def start(
+        self,
+        verbose: bool,
+        recording_frequency: Optional[str] = None
+    ) -> int:
+        all_node_names = self.get_node_names()
+        # NOTE: caret_trace creates nodes with the name caret_trace_[pid].
+        self._caret_node_names = {
+            node_name
+            for node_name
+            in all_node_names
+            if 'caret_trace_' in node_name
+        }
+        caret_node_num = len(self._caret_node_names)
+        if caret_node_num > 0:
+            print(f'{caret_node_num} recordable processes found.')
+        if verbose:
+            self._progress = tqdm(
+                total=caret_node_num,
+                bar_format='{n}/{total} process started recording', leave=True)
+
+        msg = Start()
+        msg.recording_frequency = 100 if recording_frequency is None else int(recording_frequency)
+        self._start_pub_.publish(msg)
+        return caret_node_num
+
+    def end(self):
+        msg = End()
+        self._end_pub_.publish(msg)
 
 
 class RecordVerb(VerbExtension):
@@ -40,11 +125,19 @@ class RecordVerb(VerbExtension):
         parser.add_argument(
             '-v', '--verbose', dest='verbose', action='store_true',
             help='display status of recording')
+        parser.add_argument(
+            '-f', '--recording-frequency', dest='recording_frequency',
+            help=('recording frequency for Initialization-related trace points (default: 100Hz). '
+                  'Higher frequencies allow recording in a shorter time. '
+                  'However, the possibility of recording failure increases. '))
 
     def main(self, *, args):
         events_ust = ['ros*']
-        context_fields = names.DEFAULT_CONTEXT
+        context_names = names.DEFAULT_CONTEXT
         events_kernel = []
+
+        rclpy.init()
+        node = CaretSessionNode()
 
         init_args = {}
         init_args['session_name'] = args.session_name
@@ -53,12 +146,24 @@ class RecordVerb(VerbExtension):
         init_args['kernel_events'] = events_kernel
         # Note: key name of context_fields differs in galactic and humble,
         if os.environ['ROS_DISTRO'] == 'galactic':
-            init_args['context_names'] = context_fields
+            init_args['context_names'] = context_names
         else:
-            init_args['context_fields'] = context_fields
+            init_args['context_fields'] = context_names
         init_args['display_list'] = args.list
-
         init(**init_args)
-        fini(session_name=args.session_name)
+
+        def _run():
+            recordable_node_num = node.start(args.verbose, args.recording_frequency)
+            while not node.started and recordable_node_num > 0:
+                rclpy.spin_once(node)
+            input('press enter to stop...')
+
+        def _fini():
+            node.stop_progress()
+            node.end()
+            print('stopping & destroying tracing session')
+            lttng.lttng_fini(session_name=args.session_name)
+
+        execute_and_handle_sigint(_run, _fini)
 
         return 0

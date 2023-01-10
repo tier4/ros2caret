@@ -130,9 +130,28 @@ class RecordVerb(VerbExtension):
             help=('recording frequency for Initialization-related trace points (default: 100Hz). '
                   'Higher frequencies allow recording in a shorter time. '
                   'However, the possibility of recording failure increases. '))
+        parser.add_argument(
+            '--light', dest='light_mode', action='store_true',
+            help='light mode (record high level events only)')
 
     def main(self, *, args):
-        events_ust = ['ros*']
+        if args.light_mode:
+            events_ust = [
+                    'ros2:*callback*',
+                    'ros2_caret:*callback*',
+                    'ros2:dispatch*',
+                    'ros2_caret:dispatch*',
+                    'ros2:rclcpp*',
+                    'ros2_caret:rclcpp*',
+                    'ros2_caret:rmw*',
+                    '*callback_group*',
+                    'ros2_caret:*executor',
+                    'ros2_caret:dds_bind*',
+                    'ros2:rcl_*init',
+                    'ros2_caret:rcl_*init',
+                    'ros2_caret:caret_init']
+        else:
+            events_ust = ['ros*']
         context_names = names.DEFAULT_CONTEXT
         events_kernel = []
 

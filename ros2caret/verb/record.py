@@ -148,7 +148,8 @@ class RecordVerb(VerbExtension):
                     'ros2_caret:*executor',
                     'ros2_caret:dds_bind*',
                     'ros2:rcl_*init',
-                    'ros2_caret:rcl_*init']
+                    'ros2_caret:rcl_*init',
+                    'ros2_caret:caret_init']
         else:
             events_ust = ['ros*']
         context_names = names.DEFAULT_CONTEXT

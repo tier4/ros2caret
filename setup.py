@@ -39,6 +39,8 @@ setup(
                     ros2caret.verb.verify_paths:VerifyPathsVerb',
             'record = \
                     ros2caret.verb.record:RecordVerb',
+            'version = \
+                    ros2caret.verb.version:CaretVersionVerb',
             # 'callback_graph = \
             #       ros2caret.verb.callback_graph:CallbackGraphVerb',
             # 'chain_latency = ros2caret.verb.chain_latency:ChainLatencyVerb',

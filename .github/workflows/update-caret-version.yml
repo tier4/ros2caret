@@ -1,0 +1,41 @@
+name: caret-version
+
+on:
+  push:
+    tags:
+      - 'v\d\.\d\.\d'
+
+
+jobs:
+  caret-version:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Get latest tag
+        id: get_tag
+        run: |
+          latest_tag=$(curl -s https://api.github.com/repos/tier4/caret/tags | jq -r .[0].name)
+          echo "Latest Caret tag: $latest_tag"
+          echo "::set-output name=latest_tag::$latest_tag"
+      
+      
+      - name: Set up Git
+        run: |
+          git config --global user.email "XXX"
+          git config --global user.name "YYY
+                  
+      - name: Checkout ros2caret
+        uses: actions/checkout@v3
+        with:
+          repository: tier4/ros2caret
+          ref: main
+
+
+      - name: Update version in setup.py
+        run: |
+          latest_tag=${{ steps.get_tag.outputs.latest_tag }}
+          sed -i "s/version=.*/version='$latest_tag',/" setup.py
+          git add setup.py
+          git commit -m "Update version to $latest_tag" 
+          git push origin main
+     

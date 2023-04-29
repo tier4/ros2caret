@@ -12,28 +12,23 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import os
+
 from ros2caret.verb import VerbExtension
-import requests
-from bs4 import BeautifulSoup
+
 
 class CaretVersionVerb(VerbExtension):
-    
-    def _get_latest_caret_version(self):
-
-        CARET_LATEST_VERSION_URL = 'https://github.com/tier4/caret/tags'
-
-        response = requests.get(CARET_LATEST_VERSION_URL)
-        soup = BeautifulSoup(response.content, 'html.parser')
-
-        version_tag = soup.find('h2', {'class': 'f4 d-inline'})
-        version_tag = version_tag.find('a')
-        # print(version_tag)
-        
-        return version_tag
-
 
     def main(self, *, args):
-        latest_version = self._get_latest_caret_version()
-        print(latest_version.text)
-    
-        
+        current_dir = os.path.dirname(os.path.realpath(__file__))
+        parent_dir = os.path.abspath(os.path.join(current_dir, '../..'))
+        setup_path = os.path.join(parent_dir, 'setup.py')
+        with open(setup_path, 'r') as file:
+            for line in file:
+                if 'version=' in line:
+                    version = line.replace("version='", '')
+                    version = version.replace("'", '')
+                    version = version.replace(',', '')
+                    version = version.strip()
+                    print(version)
+                    break

@@ -21,8 +21,8 @@ jobs:
       
       - name: Set up Git
         run: |
-          git config --global user.email "XXX"
-          git config --global user.name "YYY
+          git config --global user.email github-actions@github.com
+          git config --global user.name github-actions
                   
       - name: Checkout ros2caret
         uses: actions/checkout@v3
@@ -36,6 +36,6 @@ jobs:
           latest_tag=${{ steps.get_tag.outputs.latest_tag }}
           sed -i "s/version=.*/version='$latest_tag',/" setup.py
           git add setup.py
-          git commit -m "Update version to $latest_tag" 
+          git commit -m "Update version to $latest_tag" -s
           git push origin main
      

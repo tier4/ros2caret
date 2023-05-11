@@ -38,4 +38,3 @@ jobs:
           git add setup.py
           git commit -m "Update version to $latest_tag" -s
           git push origin main
-     

@@ -5,7 +5,6 @@ on:
     tags:
       - v\d\.\d\.\d
 
-
 jobs:
   caret-version:
     runs-on: ubuntu-latest
@@ -17,19 +16,17 @@ jobs:
           latest_tag=$(curl -s https://api.github.com/repos/tier4/caret/tags | jq -r .[0].name)
           echo "Latest Caret tag: $latest_tag"
           echo "::set-output name=latest_tag::$latest_tag"
-      
-      
+
       - name: Set up Git
         run: |
           git config --global user.email github-actions@github.com
           git config --global user.name github-actions
-                  
+
       - name: Checkout ros2caret
         uses: actions/checkout@v3
         with:
           repository: tier4/ros2caret
           ref: main
-
 
       - name: Update version in setup.py
         run: |

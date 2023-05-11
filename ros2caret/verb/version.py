@@ -21,14 +21,18 @@ class CaretVersionVerb(VerbExtension):
 
     def main(self, *, args):
         current_dir = os.path.dirname(os.path.realpath(__file__))
+        print(__file__)
+        # print(os.path.join(current_dir, '../..'))
         parent_dir = os.path.abspath(os.path.join(current_dir, '../..'))
+        # print(parent_dir)
         setup_path = os.path.join(parent_dir, 'setup.py')
+        # setup_path = f"{os.path.dirname(os.path.abspath(__file__))}/../../setup.py"
+        # print(setup_path)
         with open(setup_path, 'r') as file:
             for line in file:
                 if 'version=' in line:
                     version = line.replace("version='", '')
                     version = version.replace("'", '')
-                    version = version.replace(',', '')
-                    version = version.strip()
+                    version = version.replace(',', '').strip()
                     print(version)
                     break

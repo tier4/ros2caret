@@ -3,7 +3,7 @@ name: caret-version
 on:
   push:
     tags:
-      - 'v\d\.\d\.\d'
+      - v\d\.\d\.\d
 
 
 jobs:

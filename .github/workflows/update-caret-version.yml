@@ -13,7 +13,7 @@ jobs:
       - name: Get latest tag
         id: get_tag
         run: |
-          latest_tag=$(curl -s https://api.github.com/repos/tier4/caret/tags | jq -r .[0].name)
+          latest_tag=$(curl -s https://api.github.com/repos/tier4/ros2caret/tags | jq -r .[0].name)
           echo "Latest Caret tag: $latest_tag"
           echo "::set-output name=latest_tag::$latest_tag"
 

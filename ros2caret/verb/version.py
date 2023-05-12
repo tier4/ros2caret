@@ -20,9 +20,7 @@ from ros2caret.verb import VerbExtension
 class CaretVersionVerb(VerbExtension):
 
     def main(self, *, args):
-        current_dir = os.path.dirname(os.path.realpath(__file__))
-        parent_dir = os.path.abspath(os.path.join(current_dir, '../..'))
-        setup_path = os.path.join(parent_dir, 'setup.py')
+        setup_path = f"{os.path.dirname(os.path.realpath(__file__))}/../../setup.py"
         with open(setup_path, 'r') as file:
             for line in file:
                 if 'version=' in line:

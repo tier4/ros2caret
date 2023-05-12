@@ -14,6 +14,8 @@
 
 import os
 
+import re
+
 from ros2caret.verb import VerbExtension
 
 
@@ -23,9 +25,7 @@ class CaretVersionVerb(VerbExtension):
         setup_path = f'{os.path.dirname(os.path.realpath(__file__))}/../../setup.py'
         with open(setup_path, 'r') as file:
             for line in file:
-                if 'version=' in line:
-                    version = line.replace("version='", '')
-                    version = version.replace("'", '')
-                    version = version.replace(',', '').strip()
-                    print(version)
+                version = re.search("version='(.*)',", line)
+                if version is not None:
+                    print(version.group(1))
                     break

@@ -34,4 +34,4 @@ jobs:
           sed -i "s/version=.*/version='$latest_tag',/" setup.py
           git add setup.py
           git commit -m "Update version to $latest_tag" -s
-          git push origin main
+          git push origin feat/caret_version

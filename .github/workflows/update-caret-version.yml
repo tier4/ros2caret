@@ -25,8 +25,8 @@ jobs:
       - name: Checkout ros2caret
         uses: actions/checkout@v3
         with:
-          repository: tier4/ros2caret
-          ref: main
+          repository: taro-yu/ros2caret
+          ref: feat/caret_version
 
       - name: Update version in setup.py
         run: |

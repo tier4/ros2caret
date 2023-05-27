@@ -13,7 +13,9 @@
 # limitations under the License.
 
 from ros2caret.verb import VerbExtension
+
 from ..__version__ import __version__
+
 
 class CaretVersionVerb(VerbExtension):
 

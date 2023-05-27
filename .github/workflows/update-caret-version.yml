@@ -1,4 +1,4 @@
-name: Update Version and Create PR
+name: Update CARET Version and Create PR
 
 on:
   push:
@@ -55,7 +55,7 @@ jobs:
         
       - name: Commit and push changes
         run: |
-          sed -i "s/__version__=.*/__version__='${{steps.tag.outputs.TAG_NAME}}'/" ros2caret/__version__.py
+          sed -i "s/__version__ =.*/__version__ = '${{steps.tag.outputs.TAG_NAME}}'/" ros2caret/__version__.py
           git add ros2caret/__version__.py
           git commit -m "chore: update version to ${{ steps.tag.outputs.TAG_NAME }}" -s
           git push origin ${{steps.tag.outputs.BRANCH_NAME}}

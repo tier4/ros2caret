@@ -1,0 +1,70 @@
+name: Update Version and Create PR
+
+on:
+  push:
+    tags:
+      - v\d\.\d\.\d
+
+jobs:
+  update-version-and-create-pr:
+    permissions:
+      actions: write
+      checks: write
+      contents: write
+      deployments: write
+      issues: write
+      packages: write
+      pull-requests: write
+      repository-projects: write
+      security-events: write
+      statuses: write
+
+    runs-on: ubuntu-latest
+    steps:
+
+      - name: Set up Git
+        run: |
+          git config --global user.name github-actions
+          git config --global user.email github-actions@github.com
+
+      - name: Get New Branch and Tag
+        id: tag
+        run: |
+          tag=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/tags | jq -r .[0].name)
+          branches=$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/branches" | jq -r '.[].name')
+
+          echo "TAG_NAME=$tag" >> "$GITHUB_OUTPUT"
+
+          max_version=""
+          for branch in $branches; do
+            if [[ $branch == rc/v* ]]; then
+              version=$(echo $branch | sed -E 's/rc\/v([0-9]+\.[0-9]+\.[0-9]+)/\1/')
+              if [[ -z $max_version || $version > $max_version ]]; then
+                max_version=$version
+                max_version_branch=$branch
+              fi
+            fi
+          done
+          echo "BRANCH_NAME=$max_version_branch" >> "$GITHUB_OUTPUT"
+      
+
+      - name: Checkout repository2
+        uses: actions/checkout@v3
+        with:
+          ref: ${{steps.tag.outputs.BRANCH_NAME}}
+
+      - name: Commit and push changes
+        run: |
+          sed -i "s/__version__=.*/__version__='${{steps.tag.outputs.TAG_NAME}}'/" ros2caret/__version__.py
+          git add ros2caret/__version__.py
+          git commit -m "chore: update version to ${{ steps.tag.outputs.TAG_NAME }}" -s
+          git push origin ${{steps.tag.outputs.BRANCH_NAME}}
+
+      - name: Create PR to main branch
+        run: |
+          gh pr create --title "chore: update version to ${{ steps.tag.outputs.TAG_NAME }}" \
+                       --body "This pull request updates the version in __version__.py to ${{ steps.tag.outputs.TAG_NAME }}" \
+                       --base main \
+                       --head ${{ steps.tag.outputs.BRANCH_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

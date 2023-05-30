@@ -21,7 +21,6 @@ jobs:
 
     runs-on: ubuntu-latest
     steps:
-
       - name: Set up Git
         run: |
           git config --global user.name github-actions
@@ -46,7 +45,6 @@ jobs:
             fi
           done
           echo "BRANCH_NAME=$max_version_branch" >> "$GITHUB_OUTPUT"
-      
 
       - name: Checkout repository2
         uses: actions/checkout@v3

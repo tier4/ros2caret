@@ -3,11 +3,11 @@ from setuptools import setup
 import os
 
 package_name = 'ros2caret'
-ns = dict()
+ns: dict[str, str] = {}
 
 version_path = f'{os.path.dirname(os.path.realpath(__file__))}/ros2caret/__version__.py'
 with open(version_path, 'r') as f:
-   eval(compile(f.read(), version_path, 'exec'), dict(), ns)
+   eval(compile(f.read(), version_path, 'exec'), ns)
 
 setup(
     name=package_name,

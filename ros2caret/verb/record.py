@@ -164,6 +164,9 @@ class RecordVerb(VerbExtension):
         init_args['base_path'] = args.path
         init_args['ros_events'] = events_ust
         init_args['kernel_events'] = events_kernel
+        # Note: keyword argument --append-trace has been added since iron.
+        if os.environ['ROS_DISTRO'] == 'iron' or os.environ['ROS_DISTRO'] == 'rolling':
+            init_args['append_trace'] = True
         # Note: key name of context_fields differs in galactic and humble,
         if os.environ['ROS_DISTRO'] == 'galactic':
             init_args['context_names'] = context_names

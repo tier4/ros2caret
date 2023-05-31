@@ -57,7 +57,7 @@ jobs:
           git add ros2caret/__version__.py
           git commit -m "chore: update version to ${{ steps.tag.outputs.TAG_NAME }}" -s
           git push origin ${{steps.tag.outputs.BRANCH_NAME}}
-      
+
       - name: Re-create tag
         run: |
           git push -d origin ${{ steps.tag.outputs.TAG_NAME }}

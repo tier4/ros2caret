@@ -8,17 +8,17 @@ on:
 jobs:
   update-version-and-create-pr:
 
-    permissions:
-      actions: write
-      checks: write
-      contents: write
-      deployments: write
-      issues: write
-      packages: write
-      pull-requests: write
-      repository-projects: write
-      security-events: write
-      statuses: write
+  permissions:
+    actions: write
+    checks: write
+    contents: write
+    deployments: write
+    issues: write
+    packages: write
+    pull-requests: write
+    repository-projects: write
+    security-events: write
+    statuses: write
 
     runs-on: ubuntu-latest
     steps:

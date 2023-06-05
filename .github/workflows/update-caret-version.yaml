@@ -37,7 +37,7 @@ jobs:
           max_version=""
           for branch in $branches; do
             if [[ $branch == rc/v* ]]; then
-              version=$(echo $branch | sed -E 's/rc\/v([0-9]+\.[0-9]+\.[0-9]+)/\1/')
+              version=$(echo $branch | sed -E 's/rc\/v([0-9]+(.*)[0-9]+)/\1/')
               if [[ -z $max_version || $version > $max_version ]]; then
                 max_version=$version
                 max_version_branch=$branch

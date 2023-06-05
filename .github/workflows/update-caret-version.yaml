@@ -3,7 +3,7 @@ name: Update Version and Create PR
 on:
   push:
     tags:
-      - v\d\.\d\.\d
+      - v*
 
 jobs:
   update-version-and-create-pr:

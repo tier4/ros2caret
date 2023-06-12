@@ -31,38 +31,7 @@ jobs:
         run: |
           tag=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/tags | jq -r .[0].name)
           branch="rc/$tag"
-          # branches=$(curl -s "https://api.github.com/repos/${GITHUB_REPOSITORY}/branches" | jq -r '.[].name')
-
-          # echo "TAG_NAME=$tag" >> "$GITHUB_OUTPUT"
-
-          # IFS='.' read -ra max_version <<< "0.0.0"
-          # for branch in $branches; do
-          #   if [[ $branch == rc/v* ]]; then
-          #     version=$(echo $branch | sed -E 's/rc\/v([0-9]+(.*)[0-9]+)/\1/')
-          #     IFS='.' read -ra version_numbers <<< "$version"
-
-          #     if (( ${version_numbers[1]} > ${max_version[1]} )); then
-          #       max_version=(${version_numbers[@]})
-          #       max_version_branch=$branch
-
-          #     elif (( ${version_numbers[2]} > ${max_version[2]} )); then
-          #       max_version=(${version_numbers[@]})
-          #       max_version_branch=$branch
-
-          #     elif [ "${version_numbers[3]+exist}" ]; then
-          #       if [ "${max_version[3]+exist}" ]; then
-          #         if (( ${version_numbers[3]} > ${max_version[3]} )); then
-          #           max_version=(${version_numbers[@]})
-          #           max_version_branch=$branch
-          #         fi
-          #       else
-          #         max_version=(${version_numbers[@]})
-          #         max_version_branch=$branch
-          #       fi
-          #     fi
-          #   fi
-          # done
-
+          
           echo "BRANCH_NAME=$branch" >> "$GITHUB_OUTPUT"
 
       - name: Checkout repository2

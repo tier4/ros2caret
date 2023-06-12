@@ -12,7 +12,7 @@ with open(version_path, 'r') as f:
 
 setup(
     name=package_name,
-    version=ns['__version__.py'],
+    version=ns['__version__'],
     packages=[package_name],
     data_files=[
         ('share/ament_index/resource_index/packages',

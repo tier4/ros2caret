@@ -30,7 +30,7 @@ jobs:
         id: tag
         run: |
           tag=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/tags | jq -r .[0].name)
-          branch="rc/$tag"
+          branch=rc/$tag
           echo "TAG_NAME=$tag" >> "$GITHUB_OUTPUT"
           echo "BRANCH_NAME=$branch" >> "$GITHUB_OUTPUT"
 

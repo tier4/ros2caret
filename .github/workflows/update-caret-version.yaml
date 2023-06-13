@@ -30,8 +30,8 @@ jobs:
         id: tag
         run: |
           latest_tag=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/tags | jq -r .[0].name)
-          current_tag=${{github.ref_name}}
-          branch=rc/$latest_tag
+          current_tag=${{ github.ref_name }}
+          branch=rc/$tag
           echo "LATEST_TAG_NAME=$latest_tag" >> "$GITHUB_OUTPUT"
           echo "TAG_NAME=$current_tag" >> "$GITHUB_OUTPUT"
           echo "BRANCH_NAME=$branch" >> "$GITHUB_OUTPUT"
@@ -43,7 +43,7 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          sed -i "s/__version__ =.*/__version__ = '${{steps.tag.outputs.TAG_NAME}}'/" ros2caret/__version__.py
+          sed -i "s/__version__ =.*/__version__ = '${{ steps.tag.outputs.TAG_NAME }}'/" ros2caret/__version__.py
           git add ros2caret/__version__.py
           git commit -m "chore: update version to ${{ steps.tag.outputs.TAG_NAME }}" -s
           git push origin ${{steps.tag.outputs.BRANCH_NAME}}

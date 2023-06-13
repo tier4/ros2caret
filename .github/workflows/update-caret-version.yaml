@@ -31,7 +31,7 @@ jobs:
         run: |
           latest_tag=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/tags | jq -r .[0].name)
           current_tag=${{ github.ref_name }}
-          branch=rc/v$tag
+          branch=rc/$tag
           echo "LATEST_TAG_NAME=$latest_tag" >> "$GITHUB_OUTPUT"
           echo "TAG_NAME=$current_tag" >> "$GITHUB_OUTPUT"
           echo "BRANCH_NAME=$branch" >> "$GITHUB_OUTPUT"

@@ -54,7 +54,7 @@ jobs:
           git tag ${{ steps.tag.outputs.TAG_NAME }}
           git push origin ${{ steps.tag.outputs.TAG_NAME }}
 
-      - name: Create PR to main branch
+      - name: Create PR to main branch if the created tag is the latest
         run: |
           if [ ${{ steps.tag.outputs.LATEST_TAG_NAME }} == ${{ steps.tag.outputs.TAG_NAME }} ]; then
             gh pr create --title "chore: update version to ${{ steps.tag.outputs.TAG_NAME }}" \

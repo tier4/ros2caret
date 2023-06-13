@@ -39,14 +39,14 @@ jobs:
       - name: Checkout repository2
         uses: actions/checkout@v3
         with:
-          ref: ${{steps.tag.outputs.BRANCH_NAME}}
+          ref: ${{ steps.tag.outputs.BRANCH_NAME }}
 
       - name: Commit and push changes
         run: |
           sed -i "s/__version__ =.*/__version__ = '${{ steps.tag.outputs.TAG_NAME }}'/" ros2caret/__version__.py
           git add ros2caret/__version__.py
           git commit -m "chore: update version to ${{ steps.tag.outputs.TAG_NAME }}" -s
-          git push origin ${{steps.tag.outputs.BRANCH_NAME}}
+          git push origin ${{ steps.tag.outputs.BRANCH_NAME }}
 
       - name: Re-create tag
         run: |

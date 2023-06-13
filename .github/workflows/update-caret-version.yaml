@@ -29,9 +29,11 @@ jobs:
       - name: Get New Branch and Tag
         id: tag
         run: |
-          tag=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/tags | jq -r .[0].name)
-          branch=rc/$tag
-          echo "TAG_NAME=$tag" >> "$GITHUB_OUTPUT"
+          latest_tag=$(curl -s https://api.github.com/repos/${GITHUB_REPOSITORY}/tags | jq -r .[0].name)
+          current_tag=${{github.ref_name}}
+          branch=rc/$latest_tag
+          echo "LATEST_TAG_NAME=$latest_tag" >> "$GITHUB_OUTPUT"
+          echo "TAG_NAME=$current_tag" >> "$GITHUB_OUTPUT"
           echo "BRANCH_NAME=$branch" >> "$GITHUB_OUTPUT"
 
       - name: Checkout repository2
@@ -54,9 +56,10 @@ jobs:
 
       - name: Create PR to main branch
         run: |
-          gh pr create --title "chore: update version to ${{ steps.tag.outputs.TAG_NAME }}" \
-                       --body "This pull request updates the version in __version__.py to ${{ steps.tag.outputs.TAG_NAME }}" \
-                       --base main \
-                       --head ${{ steps.tag.outputs.BRANCH_NAME }}
+          if [ ${{ steps.tag.outputs.LATEST_TAG_NAME }} == ${{ steps.tag.outputs.TAG_NAME }} ]; then
+            gh pr create --title "chore: update version to ${{ steps.tag.outputs.TAG_NAME }}" \
+                         --body "This pull request updates the version in __version__.py to ${{ steps.tag.outputs.TAG_NAME }}" \
+                         --base main \
+                         --head ${{ steps.tag.outputs.BRANCH_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

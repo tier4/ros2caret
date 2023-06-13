@@ -1,10 +1,18 @@
+import os
+
 from setuptools import setup
 
+
 package_name = 'ros2caret'
+ns: dict[str, str] = {}
+
+version_path = f'{os.path.dirname(os.path.realpath(__file__))}/ros2caret/__version__.py'
+with open(version_path, 'r') as f:
+    eval(compile(f.read(), version_path, 'exec'), ns)
 
 setup(
     name=package_name,
-    version='0.2.1',
+    version=ns['__version__'],
     packages=[package_name],
     data_files=[
         ('share/ament_index/resource_index/packages',
@@ -39,6 +47,8 @@ setup(
                     ros2caret.verb.verify_paths:VerifyPathsVerb',
             'record = \
                     ros2caret.verb.record:RecordVerb',
+            'version = \
+                    ros2caret.verb.version:CaretVersionVerb',
             # 'callback_graph = \
             #       ros2caret.verb.callback_graph:CallbackGraphVerb',
             # 'chain_latency = ros2caret.verb.chain_latency:ChainLatencyVerb',

@@ -51,6 +51,8 @@ def init(
     context_fields: List[str],
     display_list: bool = False,
     append_trace: bool = True,
+    subbuffer_size_ust: int = 8 * 4096,
+    subbuffer_size_kernel: int = 32 * 4096,
 ) -> bool:
     """
     Init and start tracing.
@@ -66,6 +68,10 @@ def init(
     :param kernel_events: list of kernel events to enable
     :param context_fields: list of context fields to enable
     :param display_list: whether to display list(s) of enabled events and context names
+    :param subbuffer_size_ust: the size of the subbuffers for userspace events (defaults to 8 times
+        the usual page size)
+    :param subbuffer_size_kernel: the size of the subbuffers for kernel events (defaults to 32
+        times the usual page size, since there can be way more kernel events than UST events)
     :return: True if successful, False otherwise
     """
     # Check if LTTng is installed right away before printing anything
@@ -107,6 +113,8 @@ def init(
             ros_events=ros_events,
             kernel_events=kernel_events,
             context_fields=context_fields,
+            subbuffer_size_ust=subbuffer_size_ust,
+            subbuffer_size_kernel=subbuffer_size_kernel,
         )
     # for humble
     else:

@@ -170,7 +170,6 @@ class RecordVerb(VerbExtension):
         else:
             init_args['context_fields'] = context_names
         init_args['display_list'] = args.list
-
         init(**init_args)
 
         def _run():

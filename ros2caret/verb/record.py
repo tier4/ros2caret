@@ -15,6 +15,7 @@
 import os
 
 from typing import Optional
+import numpy as np
 
 from caret_msgs.msg import End, Start, Status
 
@@ -136,11 +137,15 @@ class RecordVerb(VerbExtension):
             help='light mode (record high level events only)')
         parser.add_argument(
             '--subbuffer-size-ust', dest='subbuffer_size_ust', type=int,
-            help='the size of the subbuffers for userspace events. '
+            default=8*4096,
+            help='the size of the subbuffers for userspace events(default: 8*4096). '
+                 'buffer size must be power of two. '
                  'available in iron or rolling only. ')
         parser.add_argument(
             '--subbuffer-size-kernel', dest='subbuffer_size_kernel', type=int,
-            help='the size of the subbuffers for kernel events. '
+            default=32*4096,
+            help='the size of the subbuffers for kernel events(default: 32*4096). '
+                 'buffer size must be power of two. '
                  'available in iron or rolling only. ')
 
     def main(self, *, args):
@@ -180,11 +185,22 @@ class RecordVerb(VerbExtension):
             init_args['context_fields'] = context_names
         init_args['display_list'] = args.list
         # Note: keyword argument --subbuffer_size_ust/kernel are available in iron or rolling.
-        if os.environ['ROS_DISTRO'] in ['iron', 'rolling']:
-            if args.subbuffer_size_ust:
-                init_args['subbuffer_size_ust'] = args.subbuffer_size_ust
-            if args.subbuffer_size_kernel:
-                init_args['subbuffer_size_kernel'] = args.subbuffer_size_kernel
+
+        if os.environ['ROS_DISTRO'] not in ['iron', 'rolling'] \
+                and args.subbuffer_size_ust != 8*4096:
+            raise ValueError('the --subbuffer-size-ust option is '
+                                'available in iron or rolling')
+        if not np.log2(args.subbuffer_size_ust).is_integer():
+            raise ValueError('--subbuffer-size-ust value must be power of two.')
+        init_args['subbuffer_size_ust'] = args.subbuffer_size_ust
+
+        if os.environ['ROS_DISTRO'] not in ['iron', 'rolling'] \
+                and args.subbuffer_size_kernel != 32*4096:
+            raise ValueError('the --subbuffer-size-kernel option is '
+                                'available in iron or rolling')
+        if not np.log2(args.subbuffer_size_kernel).is_integer():
+            raise ValueError('--subbuffer-size-kernel value must be power of two.')
+        init_args['subbuffer_size_kernel'] = args.subbuffer_size_kernel
         init(**init_args)
 
         def _run():

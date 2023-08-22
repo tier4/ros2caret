@@ -49,10 +49,10 @@ def init(
     ros_events: List[str],
     kernel_events: List[str],
     context_fields: List[str],
+    subbuffer_size_ust: int,
+    subbuffer_size_kernel: int,
     display_list: bool = False,
     append_trace: bool = True,
-    subbuffer_size_ust: int = 8 * 4096,
-    subbuffer_size_kernel: int = 32 * 4096,
 ) -> bool:
     """
     Init and start tracing.

@@ -21,6 +21,7 @@ from tracetools_trace.tools import lttng
 from tracetools_trace.tools import path
 from tracetools_trace.tools import print_names_list
 
+
 def init(
     *,
     session_name: str,

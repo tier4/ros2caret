@@ -21,7 +21,6 @@ from caret_msgs.msg import End, Start, Status
 import rclpy
 from rclpy import qos
 from rclpy.node import Node
-from tqdm import tqdm
 
 from ros2caret.verb import VerbExtension
 from ros2caret.verb.caret_record_init import init

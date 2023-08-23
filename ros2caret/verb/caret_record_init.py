@@ -13,7 +13,7 @@
 # limitations under the License.
 
 # Many parts of this file have been reused from the following file.
-#   https://github.com/ros2/ros2_tracing/blob/0d9883c183244d4ac8f35e0e759b0642f5f91014/
+#   https://github.com/ros2/ros2_tracing/blob/236e4b90a5ff6cdffa5a881717c473563370c0fc/
 #   tracetools_trace/tracetools_trace/trace.py
 # The copyright of original code is as follows:
 

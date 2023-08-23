@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# このファイルの多くの部分は以下のファイルから流用しています。
+# Many parts of this file have been reused from the following file.
 #   https://github.com/ros2/ros2_tracing/blob/0d9883c183244d4ac8f35e0e759b0642f5f91014/
 #   tracetools_trace/tracetools_trace/trace.py
 # The copyright of original code is as follows:

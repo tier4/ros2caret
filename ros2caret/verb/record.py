@@ -15,9 +15,10 @@
 import os
 
 from typing import Optional
-import numpy as np
 
 from caret_msgs.msg import End, Start, Status
+
+import numpy as np
 
 import rclpy
 from rclpy import qos
@@ -189,7 +190,7 @@ class RecordVerb(VerbExtension):
         if os.environ['ROS_DISTRO'] not in ['iron', 'rolling'] \
                 and args.subbuffer_size_ust != 8*4096:
             raise ValueError('the --subbuffer-size-ust option is '
-                                'available in iron or rolling')
+                             'available in iron or rolling')
         if not np.log2(args.subbuffer_size_ust).is_integer():
             raise ValueError('--subbuffer-size-ust value must be power of two.')
         init_args['subbuffer_size_ust'] = args.subbuffer_size_ust
@@ -197,7 +198,7 @@ class RecordVerb(VerbExtension):
         if os.environ['ROS_DISTRO'] not in ['iron', 'rolling'] \
                 and args.subbuffer_size_kernel != 32*4096:
             raise ValueError('the --subbuffer-size-kernel option is '
-                                'available in iron or rolling')
+                             'available in iron or rolling')
         if not np.log2(args.subbuffer_size_kernel).is_integer():
             raise ValueError('--subbuffer-size-kernel value must be power of two.')
         init_args['subbuffer_size_kernel'] = args.subbuffer_size_kernel

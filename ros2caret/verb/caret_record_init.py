@@ -12,6 +12,28 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# This code extends the functionality of
+# https://github.com/ros2/ros2_tracing/blob/rolling/tracetools_trace/tracetools_trace/trace.py.
+# As a result, many parts have been reused from the above file.
+# Changes are following:
+#   - Support for different interfaces across different ROS2 Distributions.
+# The copyright of original code is as follows:
+
+# Copyright 2019 Robert Bosch GmbH
+# Copyright 2021 Christophe Bedard
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 import os
 import sys
 from typing import List

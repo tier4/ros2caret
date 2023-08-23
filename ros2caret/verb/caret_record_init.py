@@ -12,11 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-# This code extends the functionality of
-# https://github.com/ros2/ros2_tracing/blob/rolling/tracetools_trace/tracetools_trace/trace.py.
-# As a result, many parts have been reused from the above file.
-# Changes are following:
-#   - Support for different interfaces across different ROS2 Distributions.
+# このファイルの多くの部分は以下のファイルから流用しています。
+#   https://github.com/ros2/ros2_tracing/blob/0d9883c183244d4ac8f35e0e759b0642f5f91014/
+#   tracetools_trace/tracetools_trace/trace.py
 # The copyright of original code is as follows:
 
 # Copyright 2019 Robert Bosch GmbH

@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import math
 import os
 
 from typing import Optional
@@ -190,7 +189,7 @@ class RecordVerb(VerbExtension):
                 and args.subbuffer_size_ust != 8*4096:
             raise ValueError('the --subbuffer-size-ust option is '
                              'available in iron or rolling')
-        if not math.log2(args.subbuffer_size_ust).is_integer():
+        if args.subbuffer_size_ust & (args.subbuffer_size_ust-1):
             raise ValueError('--subbuffer-size-ust value must be power of two.')
         init_args['subbuffer_size_ust'] = args.subbuffer_size_ust
 
@@ -198,7 +197,7 @@ class RecordVerb(VerbExtension):
                 and args.subbuffer_size_kernel != 32*4096:
             raise ValueError('the --subbuffer-size-kernel option is '
                              'available in iron or rolling')
-        if not math.log2(args.subbuffer_size_kernel).is_integer():
+        if args.subbuffer_size_kernel & (args.subbuffer_size_kernel-1):
             raise ValueError('--subbuffer-size-kernel value must be power of two.')
         init_args['subbuffer_size_kernel'] = args.subbuffer_size_kernel
         init(**init_args)

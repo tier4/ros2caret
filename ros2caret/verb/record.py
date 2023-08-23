@@ -21,10 +21,10 @@ from caret_msgs.msg import End, Start, Status
 import rclpy
 from rclpy import qos
 from rclpy.node import Node
+from tqdm import tqdm
 
 from ros2caret.verb import VerbExtension
-from .caret_record_init import init
-from tqdm import tqdm
+from ros2caret.verb.caret_record_init import init
 
 from tracetools_trace.tools import lttng, names, path
 from tracetools_trace.tools.signals import execute_and_handle_sigint

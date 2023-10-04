@@ -23,11 +23,12 @@ from rclpy import qos
 from rclpy.node import Node
 
 from ros2caret.verb import VerbExtension
+from ros2caret.verb.caret_record_init import init
+
 from tqdm import tqdm
 
 from tracetools_trace.tools import lttng, names, path
 from tracetools_trace.tools.signals import execute_and_handle_sigint
-from tracetools_trace.trace import init
 
 
 class CaretSessionNode(Node):

@@ -164,6 +164,8 @@ class RecordVerb(VerbExtension):
                     'ros2:rcl_*init',
                     'ros2_caret:rcl_*init',
                     'ros2_caret:caret_init']
+            if os.environ['ROS_DISTRO'] in ['iron' or 'rolling']:
+                events_ust.append('ros2:rcl_publish')
         else:
             events_ust = ['ros*']
         context_names = names.DEFAULT_CONTEXT

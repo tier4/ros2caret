@@ -53,6 +53,7 @@ def init(
     subbuffer_size_kernel: int,
     display_list: bool = False,
     append_trace: bool = True,
+    immediate: bool = False,
 ) -> bool:
     """
     Init and start tracing.
@@ -101,7 +102,8 @@ def init(
 
     print(f'writing tracing session to: {full_session_path}')
 
-    input('press enter to start...')
+    if not immediate:
+        input('press enter to start...')
     # for iron, rolling
     if os.environ['ROS_DISTRO'] in ['iron', 'rolling']:
         trace_directory = lttng.lttng_init(

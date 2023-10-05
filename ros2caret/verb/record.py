@@ -146,6 +146,9 @@ class RecordVerb(VerbExtension):
             help='the size of the subbuffers for kernel events(default: 32*4096). '
                  'buffer size must be power of two. '
                  'available in iron or rolling only. ')
+        parser.add_argument(
+            '--immediate', dest='immediate', action='store_true',
+            help='record immediately. ')
 
     def main(self, *, args):
         if args.light_mode:
@@ -202,6 +205,7 @@ class RecordVerb(VerbExtension):
         if args.subbuffer_size_kernel & (args.subbuffer_size_kernel-1):
             raise ValueError('--subbuffer-size-kernel value must be power of two.')
         init_args['subbuffer_size_kernel'] = args.subbuffer_size_kernel
+        init_args['immediate'] = args.immediate
         init(**init_args)
 
         def _run():

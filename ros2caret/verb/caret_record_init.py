@@ -49,6 +49,8 @@ def init(
     ros_events: List[str],
     kernel_events: List[str],
     context_fields: List[str],
+    subbuffer_size_ust: int,
+    subbuffer_size_kernel: int,
     display_list: bool = False,
     append_trace: bool = True,
 ) -> bool:
@@ -66,6 +68,8 @@ def init(
     :param kernel_events: list of kernel events to enable
     :param context_fields: list of context fields to enable
     :param display_list: whether to display list(s) of enabled events and context names
+    :param subbuffer_size_ust: the size of the subbuffers for userspace events
+    :param subbuffer_size_kernel: the size of the subbuffers for kernel events
     :return: True if successful, False otherwise
     """
     # Check if LTTng is installed right away before printing anything
@@ -107,6 +111,8 @@ def init(
             ros_events=ros_events,
             kernel_events=kernel_events,
             context_fields=context_fields,
+            subbuffer_size_ust=subbuffer_size_ust,
+            subbuffer_size_kernel=subbuffer_size_kernel,
         )
     # for humble
     else:

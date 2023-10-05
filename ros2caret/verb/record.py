@@ -134,6 +134,18 @@ class RecordVerb(VerbExtension):
         parser.add_argument(
             '--light', dest='light_mode', action='store_true',
             help='light mode (record high level events only)')
+        parser.add_argument(
+            '--subbuffer-size-ust', dest='subbuffer_size_ust', type=int,
+            default=8*4096,
+            help='the size of the subbuffers for userspace events(default: 8*4096). '
+                 'buffer size must be power of two. '
+                 'available in iron or rolling only. ')
+        parser.add_argument(
+            '--subbuffer-size-kernel', dest='subbuffer_size_kernel', type=int,
+            default=32*4096,
+            help='the size of the subbuffers for kernel events(default: 32*4096). '
+                 'buffer size must be power of two. '
+                 'available in iron or rolling only. ')
 
     def main(self, *, args):
         if args.light_mode:
@@ -171,6 +183,23 @@ class RecordVerb(VerbExtension):
         else:
             init_args['context_fields'] = context_names
         init_args['display_list'] = args.list
+        # Note: keyword argument --subbuffer_size_ust/kernel are available in iron or rolling.
+
+        if os.environ['ROS_DISTRO'] not in ['iron', 'rolling'] \
+                and args.subbuffer_size_ust != 8*4096:
+            raise ValueError('the --subbuffer-size-ust option is '
+                             'available in iron or rolling')
+        if args.subbuffer_size_ust & (args.subbuffer_size_ust-1):
+            raise ValueError('--subbuffer-size-ust value must be power of two.')
+        init_args['subbuffer_size_ust'] = args.subbuffer_size_ust
+
+        if os.environ['ROS_DISTRO'] not in ['iron', 'rolling'] \
+                and args.subbuffer_size_kernel != 32*4096:
+            raise ValueError('the --subbuffer-size-kernel option is '
+                             'available in iron or rolling')
+        if args.subbuffer_size_kernel & (args.subbuffer_size_kernel-1):
+            raise ValueError('--subbuffer-size-kernel value must be power of two.')
+        init_args['subbuffer_size_kernel'] = args.subbuffer_size_kernel
         init(**init_args)
 
         def _run():

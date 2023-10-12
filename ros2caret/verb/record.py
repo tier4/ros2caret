@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import os
+import subprocess
 
 from typing import Optional
 
@@ -149,6 +150,9 @@ class RecordVerb(VerbExtension):
         parser.add_argument(
             '--immediate', dest='immediate', action='store_true',
             help='record immediately. ')
+        parser.add_argument(
+            '-c', '--record-clock', dest='record_clock', action='store_true',
+            help='launch the node where the /clock topic is stored to use ROS time. ')
 
     def main(self, *, args):
         if args.light_mode:
@@ -217,9 +221,15 @@ class RecordVerb(VerbExtension):
         def _fini():
             node.stop_progress()
             node.end()
+            if clock_recorder:
+                clock_recorder.terminate()
             print('stopping & destroying tracing session')
             lttng.lttng_fini(session_name=args.session_name)
 
+        if args.record_clock:
+            clock_recorder = subprocess.Popen('ros2 run caret_trace clock_recorder', shell=True)
+        else:
+            clock_recorder = None
         execute_and_handle_sigint(_run, _fini)
 
         return 0

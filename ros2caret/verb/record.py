@@ -227,7 +227,7 @@ class RecordVerb(VerbExtension):
             lttng.lttng_fini(session_name=args.session_name)
 
         if args.record_clock:
-            clock_recorder = subprocess.Popen(['ros2', 'run', 'caret_trace, 'clock_recorder'])
+            clock_recorder = subprocess.Popen(['ros2', 'run', 'caret_trace', 'clock_recorder'])
         else:
             clock_recorder = None
         execute_and_handle_sigint(_run, _fini)

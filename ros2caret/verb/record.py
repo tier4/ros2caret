@@ -223,13 +223,13 @@ class RecordVerb(VerbExtension):
             node.stop_progress()
             node.end()
             if clock_recorder:
-                // cspell: ignore killpg, getpgid
+                # cspell: ignore killpg, getpgid
                 os.killpg(os.getpgid(clock_recorder.pid), signal.SIGTERM)
             print('stopping & destroying tracing session')
             lttng.lttng_fini(session_name=args.session_name)
 
         if args.record_clock:
-            // cspell: ignore preexec, setpgrp
+            # cspell: ignore preexec, setpgrp
             clock_recorder = subprocess.Popen(
                 ['ros2', 'run', 'caret_trace', 'clock_recorder'],
                 preexec_fn=os.setpgrp)

@@ -14,6 +14,7 @@
 
 import os
 import subprocess
+import signal
 
 from typing import Optional
 
@@ -222,12 +223,12 @@ class RecordVerb(VerbExtension):
             node.stop_progress()
             node.end()
             if clock_recorder:
-                clock_recorder.terminate()
+                os.killpg(os.getpgid(clock_recorder.pid), signal.SIGTERM)
             print('stopping & destroying tracing session')
             lttng.lttng_fini(session_name=args.session_name)
 
         if args.record_clock:
-            clock_recorder = subprocess.Popen(['ros2', 'run', 'caret_trace', 'clock_recorder'])
+            clock_recorder = subprocess.Popen(['ros2', 'run', 'caret_trace', 'clock_recorder'], preexec_fn=os.setpgrp)
         else:
             clock_recorder = None
         execute_and_handle_sigint(_run, _fini)

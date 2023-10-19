@@ -230,7 +230,9 @@ class RecordVerb(VerbExtension):
 
         if args.record_clock:
             // cspell: ignore preexec, setpgrp
-            clock_recorder = subprocess.Popen(['ros2', 'run', 'caret_trace', 'clock_recorder'], preexec_fn=os.setpgrp)
+            clock_recorder = subprocess.Popen(
+                ['ros2', 'run', 'caret_trace', 'clock_recorder'],
+                preexec_fn=os.setpgrp)
         else:
             clock_recorder = None
         execute_and_handle_sigint(_run, _fini)

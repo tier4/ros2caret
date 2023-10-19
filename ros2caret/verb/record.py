@@ -13,8 +13,8 @@
 # limitations under the License.
 
 import os
-import subprocess
 import signal
+import subprocess
 
 from typing import Optional
 

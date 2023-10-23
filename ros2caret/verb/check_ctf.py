@@ -23,7 +23,7 @@ logger = getLogger(__name__)
 
 
 class CheckCTFVerb(VerbExtension):
-    
+
     def add_arguments(self, parser, cli_name):
         parser.add_argument(
             'trace_dir', type=str,

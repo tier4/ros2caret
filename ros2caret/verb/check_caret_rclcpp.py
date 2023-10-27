@@ -41,8 +41,9 @@ class CheckCaretRclcppVerb(VerbExtension):
 
     def add_arguments(self, parser, cli_name):
         parser.add_argument(
-            '-w', '--workspace', dest='workspace', type=str,
-            help='the path to the workspace to be checked', required=True)
+            'workspace', type=str,
+            help='the path to the workspace to be checked'
+        )
 
     def main(self, *, args):
         root_dir_path = args.workspace + '/build/'

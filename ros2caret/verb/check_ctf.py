@@ -26,10 +26,8 @@ class CheckCTFVerb(VerbExtension):
 
     def add_arguments(self, parser, cli_name):
         parser.add_argument(
-            '-d', '--trace_dir', dest='trace_dir', type=str,
-            help='the path to the trace directory to be checked',
-            required=True
-        )
+            'trace_dir', type=str,
+            help='the path to the trace directory to be checked')
 
     def main(self, *, args):
         try:

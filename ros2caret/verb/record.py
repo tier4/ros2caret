@@ -171,7 +171,8 @@ class RecordVerb(VerbExtension):
                     'ros2_caret:dds_bind*',
                     'ros2:rcl_*init',
                     'ros2_caret:rcl_*init',
-                    'ros2_caret:caret_init']
+                    'ros2_caret:caret_init',
+                    'ros2_caret:sim_time']
             if os.environ['ROS_DISTRO'] in ['iron' or 'rolling']:
                 events_ust.append('ros2:rcl_publish')
         else:

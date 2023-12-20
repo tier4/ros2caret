@@ -173,7 +173,7 @@ class RecordVerb(VerbExtension):
                     'ros2_caret:rcl_*init',
                     'ros2_caret:caret_init',
                     'ros2_caret:sim_time']
-            if os.environ['ROS_DISTRO'] in ['iron' or 'rolling']:
+            if os.environ['ROS_DISTRO'][0] >= 'i':
                 events_ust.append('ros2:rcl_publish')
         else:
             events_ust = ['ros*']
@@ -196,7 +196,7 @@ class RecordVerb(VerbExtension):
         init_args['display_list'] = args.list
         # Note: keyword argument --subbuffer_size_ust/kernel are available in iron or rolling.
 
-        if os.environ['ROS_DISTRO'] not in ['iron', 'rolling'] \
+        if os.environ['ROS_DISTRO'][0] < 'i' \
                 and args.subbuffer_size_ust != 8*4096:
             raise ValueError('the --subbuffer-size-ust option is '
                              'available in iron or rolling')
@@ -204,7 +204,7 @@ class RecordVerb(VerbExtension):
             raise ValueError('--subbuffer-size-ust value must be power of two.')
         init_args['subbuffer_size_ust'] = args.subbuffer_size_ust
 
-        if os.environ['ROS_DISTRO'] not in ['iron', 'rolling'] \
+        if os.environ['ROS_DISTRO'][0] < 'i' \
                 and args.subbuffer_size_kernel != 32*4096:
             raise ValueError('the --subbuffer-size-kernel option is '
                              'available in iron or rolling')

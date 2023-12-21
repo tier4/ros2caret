@@ -71,7 +71,7 @@ class RclcppCheck():
 
     def __init__(self, root_dir_path: str) -> None:
         RclcppCheck._ensure_dir_exist(root_dir_path)
-        RclcppCheck._validate_ros_distrinution(root_dir_path)
+        RclcppCheck._validate_ros_distribution(root_dir_path)
 
         get_package_name = RclcppCheck._create_get_package_name(root_dir_path)
         ros_obj_paths = RclcppCheck._get_obj_paths(root_dir_path)
@@ -173,7 +173,7 @@ class RclcppCheck():
         exit(1)
 
     @staticmethod
-    def _validate_ros_distrinution(path: str):
+    def _validate_ros_distribution(path: str):
         if os.environ['ROS_DISTRO'][0] < 'i':
             return
         logger.info('If you are using a ROS distribution after iron, ' \

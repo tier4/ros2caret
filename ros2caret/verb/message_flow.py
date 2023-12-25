@@ -21,7 +21,7 @@ class MessageFlowVerb(VerbExtension):
 
     def add_arguments(self, parser, cli_name):
         parser.add_argument(
-            '-t', '--trace_dir', dest='trace_dir',
+            '-t', '--trace_dir', dest='trace_dir', nargs='+',
             help='trace dir', required=True)
 
         parser.add_argument(
@@ -41,7 +41,8 @@ class MessageFlowVerb(VerbExtension):
             help='granularity of trace points to be visualized')
 
     def main(self, *, args):
-        lttng = Lttng(args.trace_dir, force_conversion=True)
+        lttng = Lttng(args.trace_dir, force_conversion=True,
+                      validate=isinstance(args.trace_directory, list))
         app = Application(args.architecture_path, 'yaml', lttng)
         path = app.path[args.path_name]
 

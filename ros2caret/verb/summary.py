@@ -43,7 +43,8 @@ class Summary:
 
         filters = self._get_filters(args.d_filter_args,
                                     args.s_filter_args)
-        self._lttng = Lttng(args.trace_dir, event_filters=filters)
+        self._lttng = Lttng(args.trace_dir, event_filters=filters,
+                            validate=isinstance(args.trace_dir, list))
         self._summary_df = self._get_summary_df(self._lttng, groupby)
         self._filtered = len(filters) > 0
 

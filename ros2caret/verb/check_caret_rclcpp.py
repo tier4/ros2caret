@@ -174,11 +174,11 @@ class RclcppCheck():
 
     @staticmethod
     def _validate_ros_distribution(path: str):
-        if os.environ['ROS_DISTRO'][0] < 'i':
+        distribution = os.environ['ROS_DISTRO']
+        if distribution[0] < 'i':
             return
-        logger.info('If you are using a ROS distribution after iron, '
-                    'you no longer need to rebuild with caret-rclcpp. '
-                    'Thus, there is no need to validate the workspace.')
+        logger.info('There is no need to build packages '
+                    f'using caret-rclcpp under ROS 2 {distribution}.')
         exit(0)
 
     @staticmethod

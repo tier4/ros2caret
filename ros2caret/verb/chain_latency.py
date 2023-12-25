@@ -21,7 +21,7 @@ class ChainLatencyVerb(VerbExtension):
 
     def add_arguments(self, parser, cli_name):
         parser.add_argument(
-            '-t', '--trace_directory', dest='trace_directory', type=str,
+            '-t', '--trace_directory', dest='trace_directory', type=str, nargs='+',
             help='the path to the main trace directory results path',
             required=True
         )
@@ -43,7 +43,8 @@ class ChainLatencyVerb(VerbExtension):
             help='granularity of trace points to be visualized')
 
     def main(self, *, args):
-        lttng = Lttng(args.trace_directory, force_conversion=True)
+        lttng = Lttng(args.trace_directory, force_conversion=True,
+                      validate=isinstance(args.trace_directory, list))
         app = Application(args.architecture_path, 'yaml', lttng)
         if args.path_name not in app.path.keys():
             print(f'Failed to find path : {args.path_name}')

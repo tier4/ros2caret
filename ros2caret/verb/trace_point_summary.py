@@ -21,7 +21,7 @@ class TracePointSummaryVerb(VerbExtension):
 
     def add_arguments(self, parser, cli_name):
         parser.add_argument(
-            'trace_dir', type=str,
+            'trace_dir', type=str, nargs='+',
             help='the path to the trace directory'
         )
         parser.add_argument(

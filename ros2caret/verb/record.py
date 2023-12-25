@@ -236,12 +236,12 @@ class RecordVerb(VerbExtension):
 
         def _fini():
             node.stop_progress()
-            node.end()
             if clock_recorder:
                 # cspell: ignore killpg, getpgid
                 os.killpg(os.getpgid(clock_recorder.pid), signal.SIGTERM)
             print('stopping & destroying tracing session')
             lttng.lttng_fini(session_name=args.session_name)
+            node.end()
 
         if args.record_clock:
             # cspell: ignore preexec, setpgrp

@@ -181,6 +181,13 @@ class RecordVerb(VerbExtension):
         context_names = names.DEFAULT_CONTEXT
         events_kernel = []
 
+        # check lttng session exist
+        is_lttng_session_exist = subprocess.run("lttng list | grep --quiet \'\\[active\\]\'",
+                            shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        if len(is_lttng_session_exist.stdout) != 0:
+            print('LTTng session is already active.')
+            exit(0)
+
         rclpy.init()
         node = CaretSessionNode()
 

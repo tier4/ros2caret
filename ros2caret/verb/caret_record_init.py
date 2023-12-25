@@ -104,7 +104,7 @@ def init(
 
     if not immediate:
         input('press enter to start...')
-    # for iron, rolling
+    # for ROS Distributions after iron
     if os.environ['ROS_DISTRO'][0] >= 'i':
         trace_directory = lttng.lttng_init(
             session_name=session_name,

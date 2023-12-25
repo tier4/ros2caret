@@ -84,4 +84,5 @@ class TestCheckCaretRclcpp:
             RclcppCheck('')
         except SystemExit:
             assert len(caplog.records) == 1
-            assert f'There is no need to build packages using caret-rclcpp under ROS 2 iron.' in caplog.messages[0]
+            assert 'There is no need to build packages ' \
+                'using caret-rclcpp under ROS 2 iron.' in caplog.messages[0]

@@ -194,7 +194,8 @@ class RecordVerb(VerbExtension):
         else:
             init_args['context_fields'] = context_names
         init_args['display_list'] = args.list
-        # Note: keyword argument --subbuffer_size_ust/kernel are available after iron.
+        # Note: keyword argument
+        # --subbuffer_size_ust/kernel are available in ROS Distributions after iron.
 
         if os.environ['ROS_DISTRO'][0] < 'i' \
                 and args.subbuffer_size_ust != 8*4096:

@@ -21,6 +21,8 @@ class TestCheckCaretRclcpp:
 
     def test_file_exist(self, caplog, mocker):
         mocker.patch('os.path.exists', return_value=True)
+        mocker.patch('ros2caret.verb.check_caret_rclcpp.RclcppCheck._validate_ros_distribution',
+                     return_value=None)
         mocker.patch(
             'ros2caret.verb.check_caret_rclcpp.RclcppCheck._get_obj_paths', return_value=[])
         RclcppCheck('')
@@ -30,6 +32,8 @@ class TestCheckCaretRclcpp:
 
     def test_ng_case(self, caplog, mocker):
         mocker.patch('os.path.exists', return_value=True)
+        mocker.patch('ros2caret.verb.check_caret_rclcpp.RclcppCheck._validate_ros_distribution',
+                     return_value=None)
         base_path = 'ros2caret.verb.check_caret_rclcpp.RclcppCheck.'
         mocker.patch(base_path+'_get_obj_paths', return_value=[''])
         mocker.patch(base_path+'_has_caret_rclcpp_tp', return_value=False)
@@ -40,6 +44,8 @@ class TestCheckCaretRclcpp:
         assert record.levelno == WARNING
 
     def test_ok_case(self, caplog, mocker):
+        mocker.patch('ros2caret.verb.check_caret_rclcpp.RclcppCheck._validate_ros_distribution',
+                     return_value=None)
         mocker.patch('os.path.exists', return_value=True)
         base_path = 'ros2caret.verb.check_caret_rclcpp.RclcppCheck.'
         mocker.patch(base_path+'_get_obj_paths', return_value=[''])
@@ -69,3 +75,14 @@ class TestCheckCaretRclcpp:
 
         get_package_name = RclcppCheck._create_get_package_name('foo/bar/')
         assert get_package_name('foo/bar/baz') == 'baz'
+
+    def test_validate_ros_distribution(self, mocker, caplog):
+        mocker.patch('os.path.exists', return_value=True)
+        mocker.patch.dict('os.environ', {'ROS_DISTRO': 'iron'})
+
+        try:
+            RclcppCheck('')
+        except SystemExit:
+            assert len(caplog.records) == 1
+            assert 'There is no need to build packages ' \
+                'using caret-rclcpp under ROS 2 iron.' in caplog.messages[0]

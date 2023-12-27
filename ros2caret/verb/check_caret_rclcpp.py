@@ -71,6 +71,7 @@ class RclcppCheck():
 
     def __init__(self, root_dir_path: str) -> None:
         RclcppCheck._ensure_dir_exist(root_dir_path)
+        RclcppCheck._validate_ros_distribution(root_dir_path)
 
         get_package_name = RclcppCheck._create_get_package_name(root_dir_path)
         ros_obj_paths = RclcppCheck._get_obj_paths(root_dir_path)
@@ -170,6 +171,15 @@ class RclcppCheck():
                      'Specify the path to the workspace '
                      'where the build command completed.')
         exit(1)
+
+    @staticmethod
+    def _validate_ros_distribution(path: str):
+        distribution = os.environ['ROS_DISTRO']
+        if distribution[0] < 'i':
+            return
+        logger.info('There is no need to build packages '
+                    f'using caret-rclcpp under ROS 2 {distribution}.')
+        exit(0)
 
     @staticmethod
     def get_package_name_from_path(root_dir_path: str, path: str) -> str:

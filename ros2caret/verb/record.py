@@ -27,6 +27,7 @@ from rclpy.node import Node
 from ros2caret.verb import VerbExtension
 from ros2caret.verb.caret_record_init import init
 
+import time
 from tqdm import tqdm
 
 from tracetools_trace.tools import lttng, names, path
@@ -219,7 +220,12 @@ class RecordVerb(VerbExtension):
             recordable_node_num = node.start(args.verbose, args.recording_frequency)
             while not node.started and recordable_node_num > 0:
                 rclpy.spin_once(node)
-            input('press enter to stop...')
+            try:
+                input('press enter to stop...')
+            except EOFError:
+                print('\nstd::input is not supported in this system. press ctrl-c to stop...')
+                while True:
+                    time.sleep(10)
 
         def _fini():
             node.stop_progress()

@@ -15,6 +15,7 @@
 import os
 import signal
 import subprocess
+import time
 
 from typing import Optional
 
@@ -27,7 +28,6 @@ from rclpy.node import Node
 from ros2caret.verb import VerbExtension
 from ros2caret.verb.caret_record_init import init
 
-import time
 from tqdm import tqdm
 
 from tracetools_trace.tools import lttng, names, path

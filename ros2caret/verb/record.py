@@ -183,9 +183,8 @@ class RecordVerb(VerbExtension):
 
         # check lttng session exist
         command = "lttng list | grep --quiet \'\\[active\\]\'"
-        ps = subprocess.run(command, shell=True, capture_output=True, text=True)
-        ret = ps.returncode
-        if ret == 0:
+        ps = subprocess.run(command, shell=True)
+        if ps.returncode == 0:
             print('LTTng session is already active.')
             exit(0)
 

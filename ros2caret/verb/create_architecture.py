@@ -92,7 +92,7 @@ class CreateArchitecture:
 
     def __init__(
         self,
-        trace_dir: str | list[str],
+        trace_dir: list[str],
         max_callback_construction_order_on_path_searching: int,
         architecture: Optional[Architecture] = None
     ) -> None:

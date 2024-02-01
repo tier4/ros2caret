@@ -43,8 +43,10 @@ jobs:
 
       - name: Commit and push changes
         run: |
-          sed -i "s/__version__ =.*/__version__ = '${{ steps.tag.outputs.TAG_NAME }}'/" ros2caret/__version__.py
-          git add ros2caret/__version__.py
+          sed -i "s/version='.*',/version='$(echo "${{ steps.tag.outputs.TAG_NAME }}" | sed 's/^.//')',/" setup.py
+          git add setup.py
+          sed -i "s|<version>.*</version>|<version>$(echo "${{ steps.tag.outputs.TAG_NAME }}" | sed 's/^.//')</version>|" package.xml
+          git add package.xml
           git commit -m "chore: update version to ${{ steps.tag.outputs.TAG_NAME }}" -s
           git push origin ${{ steps.tag.outputs.BRANCH_NAME }}
 
@@ -58,7 +60,7 @@ jobs:
         run: |
           if [ ${{ steps.tag.outputs.LATEST_TAG_NAME }} == ${{ steps.tag.outputs.TAG_NAME }} ]; then
             gh pr create --title "chore: update version to ${{ steps.tag.outputs.TAG_NAME }}" \
-                         --body "This pull request updates the version in __version__.py to ${{ steps.tag.outputs.TAG_NAME }}" \
+                         --body "This pull request updates the version in setup.py & package.xml to ${{ steps.tag.outputs.TAG_NAME }}" \
                          --base main \
                          --head ${{ steps.tag.outputs.BRANCH_NAME }}
           fi

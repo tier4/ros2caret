@@ -24,7 +24,7 @@ jobs:
         run: |
           . /opt/ros/humble/setup.sh
           rosdep update
-          # Not install caret packages in buildfarm
+          # Not install caret packages because it was added rosdep key
           sed -i '/<depend>caret_analyze<\/depend>/d' package.xml
           sed -i '/<depend>caret_msgs<\/depend>/d' package.xml
           rosdep install -r -y --from-paths .

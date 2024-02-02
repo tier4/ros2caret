@@ -24,7 +24,8 @@ jobs:
         run: |
           . /opt/ros/humble/setup.sh
           rosdep update
-          rosdep install -r -y --from-paths .
+          # Skip installation of packages that do not affect pytest
+          rosdep install -r -y --skip-keys "caret_analyze caret_msgs" --from-paths .
         shell: bash
 
       # - name: Clone dependency packages

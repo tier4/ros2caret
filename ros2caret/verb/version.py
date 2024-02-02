@@ -32,7 +32,7 @@ class CaretVersionVerb(VerbExtension):
             return fp.read()
 
     def get_version(self,rel_path):
-        version_pattern = re.compile(r"\s*version\s*=\s*['\"](\d+\.\d+\.\d+)['\"]")
+        version_pattern = re.compile(r"\s*version\s*=\s*['\"](.*)['\"]")
         for line in self.read(rel_path).splitlines():
             match = version_pattern.search(line)
             if match:

@@ -12,13 +12,25 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from ros2caret.verb import VerbExtension
+import os.path
+import re
 
-from ..__version__ import __version__
+from ros2caret.verb import VerbExtension
 
 
 class CaretVersionVerb(VerbExtension):
 
     def main(self, *, args):
-        version = __version__
-        print(version)
+        version = self.get_version()
+        print('v' + version)
+
+    def get_version(self):
+        version_path = f'{os.path.dirname(os.path.realpath(__file__))}/../../setup.py'
+        version_pattern = re.compile(r"\s*version\s*=\s*['\"](\d+\.\d+\.\d+)['\"]")
+        with open(version_path) as f:
+            for line in f:
+                match = version_pattern.search(line)
+                if match:
+                    return match.group(1)
+            else:
+                raise RuntimeError('Unable to find version string.')

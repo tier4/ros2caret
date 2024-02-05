@@ -25,9 +25,9 @@ class CaretVersionVerb(VerbExtension):
         print('v' + version)
 
     def get_version(self):
-        path = f'{os.path.dirname(os.path.realpath(__file__))}/../../setup.py'
+        version_path = f'{os.path.dirname(os.path.realpath(__file__))}/../../setup.py'
         version_pattern = re.compile(r"\s*version\s*=\s*['\"](\d+\.\d+\.\d+)['\"]")
-        with open(path) as f:
+        with open(version_path) as f:
             for line in f:
                 match = version_pattern.search(line)
                 if match:

@@ -21,13 +21,11 @@ from ros2caret.verb import VerbExtension
 class CaretVersionVerb(VerbExtension):
 
     def main(self, *, args):
-        version_path = '../../setup.py'
-        version = self.get_version(version_path)
+        version = self.get_version()
         print('v' + version)
 
-    def get_version(self, rel_path):
-        here_path = os.path.dirname(os.path.realpath(__file__))
-        path = os.path.join(here_path, rel_path)
+    def get_version(self):
+        path = f'{os.path.dirname(os.path.realpath(__file__))}/../../setup.py'
         version_pattern = re.compile(r"\s*version\s*=\s*['\"](\d+\.\d+\.\d+)['\"]")
         with open(path) as f:
             for line in f:

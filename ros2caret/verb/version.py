@@ -12,11 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from ros2caret.verb import VerbExtension
-
 import os.path
 import re
 
+from ros2caret.verb import VerbExtension
 
 class CaretVersionVerb(VerbExtension):
 
@@ -25,7 +24,7 @@ class CaretVersionVerb(VerbExtension):
         version = self.get_version(version_path)
         print('v' + version)
 
-    def get_version(self,rel_path):
+    def get_version(self, rel_path):
         here_path = os.path.dirname(os.path.realpath(__file__))
         path = os.path.join(here_path, rel_path)
         version_pattern = re.compile(r"\s*version\s*=\s*['\"](\d+\.\d+\.\d+)['\"]")
@@ -35,4 +34,4 @@ class CaretVersionVerb(VerbExtension):
                 if match:
                     return match.group(1)
             else:
-                raise RuntimeError("Unable to find version string.")
+                raise RuntimeError('Unable to find version string.')

@@ -19,6 +19,7 @@ from ros2caret.verb import VerbExtension
 
 class CaretVersionVerb(VerbExtension):
 
+
     def main(self, *, args):
         version_path = '../../setup.py'
         version = self.get_version(version_path)

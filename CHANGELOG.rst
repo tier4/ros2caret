@@ -2,8 +2,8 @@
 Changelog for package ros2caret
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Forthcoming
------------
+0.5.0 (2024-02-06)
+------------------
 * refactor: change the version management method (`#169 <https://github.com/tier4/ros2caret/issues/169>`_)
   * Update: method of get version
   * Update: Change in version control method

@@ -66,10 +66,20 @@ class CreateArchitectureVerb(VerbExtension):
             help='allow overwrite of architecture file',
             required=False, default=False
         )
+        parser.add_argument(
+            '-m', '--max_construction_order', dest='max_construction_order', type=int,
+            help='max construction order. The value must be positive integer.',
+            required=False, default=None
+        )
 
     def main(self, *, args):
-        create_arch = CreateArchitecture(args.trace_dir)
-        create_arch.create(args.output_path, args.force)
+        try:
+            create_arch = CreateArchitecture(args.trace_dir, args.max_construction_order)
+            create_arch.create(args.output_path, args.force)
+        except Exception as e:
+            logger.warning(e)
+            return 1
+        return 0
 
 
 class CreateArchitecture:
@@ -77,12 +87,23 @@ class CreateArchitecture:
     def __init__(
         self,
         trace_dir: str,
+        max_construction_order: int,
         architecture: Optional[Architecture] = None
     ) -> None:
         if architecture:
             self._arch = architecture
         else:
-            self._arch = Architecture('lttng', trace_dir)
+            if max_construction_order is not None:
+                if max_construction_order > 0:
+                    self._arch = Architecture('lttng', 
+                                              trace_dir, 
+                                              max_construction_order=max_construction_order)
+                else:
+                    raise ValueError(
+                        'error: argument -m/--max_construction_order (%s)' 
+                        % max_construction_order)
+            else:
+                self._arch = Architecture('lttng', trace_dir)
 
     def create(self, output_path: str, force: bool) -> None:
         try:

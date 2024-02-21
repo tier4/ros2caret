@@ -55,23 +55,43 @@ class VerifyPathsVerb(VerbExtension):
             help='path names to be verified.',
             required=False,
         )
+        parser.add_argument(
+            '-m', '--max_construction_order', dest='max_construction_order', type=int,
+            help='max construction order. The value must be positive integer.',
+            required=False, default=None
+        )
 
     def main(self, *, args):
-        verify_paths = VerifyPaths(args.arch_path)
-        verify_paths.verify(args.verified_path_names)
-
+        try:
+            verify_paths = VerifyPaths(args.arch_path, args.max_construction_order)
+            verify_paths.verify(args.verified_path_names)
+        except Exception as e:
+            logger.info(e)
+            return 1
+        return 0
 
 class VerifyPaths:
 
     def __init__(
         self,
         arch_path: str,
+        max_construction_order: int,
         architecture: Optional[Architecture] = None
     ) -> None:
         if architecture:
             self._arch = architecture
         else:
-            self._arch = Architecture('yaml', arch_path)
+            if max_construction_order is not None:
+                if max_construction_order > 0:
+                    self._arch = Architecture('yaml', 
+                                              arch_path, 
+                                              max_construction_order=max_construction_order)
+                else:
+                    raise ValueError(
+                        'error: argument -m/--max_construction_order (%s)' 
+                        % max_construction_order)
+            else:
+                self._arch = Architecture('yaml', arch_path)
 
     def verify(
         self,

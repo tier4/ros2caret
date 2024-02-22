@@ -27,7 +27,7 @@ class TestVerifyPaths:
                             'get_path',
                             return_value=path_mock)
 
-        verify_paths = VerifyPaths('', architecture_mock)
+        verify_paths = VerifyPaths('', 10, architecture_mock)
         verify_paths.verify(['verified_path_name'])
         assert len(caplog.records) == 1
         record = caplog.records[0]
@@ -41,6 +41,6 @@ class TestVerifyPaths:
                             'get_path',
                             return_value=path_mock)
 
-        verify_paths = VerifyPaths('', architecture_mock)
+        verify_paths = VerifyPaths('', 10, architecture_mock)
         verify_paths.verify(['verified_path_name'])
         assert len(caplog.records) == 0

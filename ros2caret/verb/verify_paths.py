@@ -23,7 +23,7 @@ except ModuleNotFoundError as e:
     if 'GITHUB_ACTION' in os.environ:
         Architecture = None
     else:
-        raise(e)
+        raise e
 
 from ros2caret.verb import VerbExtension
 
@@ -57,7 +57,7 @@ class VerifyPathsVerb(VerbExtension):
         )
         parser.add_argument(
             '-m', '--max_construction_order', dest='max_construction_order', type=int,
-            help='max construction order. The value must be positive integer."0" is unlimited.',
+            help='max construction order. The value must be positive integer. "0" is unlimited.',
             required=False, default=None
         )
 
@@ -69,6 +69,7 @@ class VerifyPathsVerb(VerbExtension):
             logger.info(e)
             return 1
         return 0
+
 
 class VerifyPaths:
 
@@ -83,12 +84,12 @@ class VerifyPaths:
         else:
             if max_construction_order is not None:
                 if max_construction_order >= 0:
-                    self._arch = Architecture('yaml', 
-                                              arch_path, 
+                    self._arch = Architecture('yaml',
+                                              arch_path,
                                               max_construction_order=max_construction_order)
                 else:
                     raise ValueError(
-                        'error: argument -m/--max_construction_order (%s)' 
+                        'error: argument -m/--max_construction_order (%s)'
                         % max_construction_order)
             else:
                 self._arch = Architecture('yaml', arch_path)

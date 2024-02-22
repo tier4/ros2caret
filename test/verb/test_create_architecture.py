@@ -22,7 +22,7 @@ class TestCreateArchitecture:
     def test_create_success_case(self, caplog, mocker):
         architecture_mock = mocker.Mock()
         mocker.patch.object(architecture_mock, 'export', return_value=None)
-        create_arch = CreateArchitecture('', architecture_mock)
+        create_arch = CreateArchitecture('', 10, architecture_mock)
 
         create_arch.create('output_path', True)
         assert len(caplog.records) == 1
@@ -34,7 +34,7 @@ class TestCreateArchitecture:
         mocker.patch.object(architecture_mock,
                             'export',
                             side_effect=OSError(''))
-        create_arch = CreateArchitecture('', architecture_mock)
+        create_arch = CreateArchitecture('', 10, architecture_mock)
 
         create_arch.create('output_path', True)
         assert len(caplog.records) == 1

@@ -164,7 +164,7 @@ class RclcppCheck():
 
     @staticmethod
     def _ensure_dir_exist(path: str):
-        if(os.path.exists(path)):
+        if os.path.exists(path):
             return
 
         logger.error('"build" directory not found. '

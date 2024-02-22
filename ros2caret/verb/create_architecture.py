@@ -27,7 +27,7 @@ except ModuleNotFoundError as e:
         Architecture = None
         CatchErrors = OSError
     else:
-        raise(e)
+        raise e
 
 from ros2caret.verb import VerbExtension
 
@@ -68,7 +68,7 @@ class CreateArchitectureVerb(VerbExtension):
         )
         parser.add_argument(
             '-m', '--max_construction_order', dest='max_construction_order', type=int,
-            help='max construction order. The value must be positive integer."0" is unlimited.',
+            help='max construction order. The value must be positive integer. "0" is unlimited.',
             required=False, default=None
         )
 
@@ -94,13 +94,13 @@ class CreateArchitecture:
             self._arch = architecture
         else:
             if max_construction_order is not None:
-                if max_construction_order >~ 0:
-                    self._arch = Architecture('lttng', 
-                                              trace_dir, 
+                if max_construction_order >= 0:
+                    self._arch = Architecture('lttng',
+                                              trace_dir,
                                               max_construction_order=max_construction_order)
                 else:
                     raise ValueError(
-                        'error: argument -m/--max_construction_order (%s)' 
+                        'error: argument -m/--max_construction_order (%s)'
                         % max_construction_order)
             else:
                 self._arch = Architecture('lttng', trace_dir)

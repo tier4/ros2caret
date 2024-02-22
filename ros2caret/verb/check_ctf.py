@@ -16,7 +16,6 @@
 from logging import getLogger
 
 from caret_analyze import Architecture, Lttng
-from caret_analyze.exceptions import Error
 from ros2caret.verb import VerbExtension
 
 logger = getLogger(__name__)
@@ -29,8 +28,8 @@ class CheckCTFVerb(VerbExtension):
             'trace_dir', type=str,
             help='the path to the trace directory to be checked')
         parser.add_argument(
-            '-m', '--max_construction_order', dest='max_construction_order', type=int, 
-            help='max construction order. The value must be positive integer."0" is unlimited.',
+            '-m', '--max_construction_order', dest='max_construction_order', type=int,
+            help='max construction order. The value must be positive integer. "0" is unlimited.',
             required=False, default=None)
 
     def main(self, *, args):
@@ -38,12 +37,12 @@ class CheckCTFVerb(VerbExtension):
             if args.max_construction_order is not None:
                 if args.max_construction_order >= 0:
                     Lttng(args.trace_dir)
-                    Architecture('lttng', 
-                                 args.trace_dir, 
+                    Architecture('lttng',
+                                 args.trace_dir,
                                  max_construction_order=args.max_construction_order)
                 else:
                     raise ValueError(
-                        'error: argument -m/--max_construction_order (%s)' 
+                        'error: argument -m/--max_construction_order (%s)'
                         % args.max_construction_order)
             else:
                 Lttng(args.trace_dir)

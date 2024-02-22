@@ -68,7 +68,7 @@ class CreateArchitectureVerb(VerbExtension):
         )
         parser.add_argument(
             '-m', '--max_construction_order', dest='max_construction_order', type=int,
-            help='max construction order. The value must be positive integer.',
+            help='max construction order. The value must be positive integer."0" is unlimited.',
             required=False, default=None
         )
 
@@ -94,7 +94,7 @@ class CreateArchitecture:
             self._arch = architecture
         else:
             if max_construction_order is not None:
-                if max_construction_order > 0:
+                if max_construction_order >~ 0:
                     self._arch = Architecture('lttng', 
                                               trace_dir, 
                                               max_construction_order=max_construction_order)

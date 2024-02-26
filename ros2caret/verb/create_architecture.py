@@ -67,8 +67,10 @@ class CreateArchitectureVerb(VerbExtension):
             required=False, default=False
         )
         parser.add_argument(
-            '-m', '--max_construction_order', dest='max_construction_order', type=int,
-            help='max construction order. The value must be positive integer. "0" is unlimited.',
+            '-m', '--max_callback_construction_order_on_path_searching',
+            type=int, dest='max_construction_order',
+            help='max construction order order on path searching.'
+                 'The value must be positive integer. "0" is unlimited.',
             required=False, default=None
         )
 

@@ -29,23 +29,23 @@ class CheckCTFVerb(VerbExtension):
             help='the path to the trace directory to be checked')
         parser.add_argument(
             '-m', '--max_callback_construction_order_on_path_searching',
-            type=int, dest='max_construction_order',
+            type=int, dest='max_callback_construction_order_on_path_searching',
             help='max construction order on path searching.'
                  'The value must be positive integer. "0" is unlimited.',
             required=False, default=None)
 
     def main(self, *, args):
         try:
-            if args.max_construction_order is not None:
-                if args.max_construction_order >= 0:
+            if args.max_callback_construction_order_on_path_searching is not None:
+                if args.max_callback_construction_order_on_path_searching >= 0:
                     Lttng(args.trace_dir)
                     Architecture('lttng',
                                  args.trace_dir,
-                                 max_construction_order=args.max_construction_order)
+                                 max_callback_construction_order_on_path_searching=args.max_callback_construction_order_on_path_searching)
                 else:
                     raise ValueError(
-                        'error: argument -m/--max_construction_order (%s)'
-                        % args.max_construction_order)
+                        'error: argument -m/--max_callback_construction_order_on_path_searching (%s)'
+                        % args.max_callback_construction_order_on_path_searching)
             else:
                 Lttng(args.trace_dir)
                 Architecture('lttng', args.trace_dir)

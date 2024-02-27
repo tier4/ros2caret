@@ -68,7 +68,7 @@ class CreateArchitectureVerb(VerbExtension):
         )
         parser.add_argument(
             '-m', '--max_callback_construction_order_on_path_searching',
-            type=int, dest='max_construction_order',
+            type=int, dest='max_callback_construction_order_on_path_searching',
             help='max construction order on path searching.'
                  'The value must be positive integer. "0" is unlimited.',
             required=False, default=None
@@ -76,7 +76,7 @@ class CreateArchitectureVerb(VerbExtension):
 
     def main(self, *, args):
         try:
-            create_arch = CreateArchitecture(args.trace_dir, args.max_construction_order)
+            create_arch = CreateArchitecture(args.trace_dir, args.max_callback_construction_order_on_path_searching)
             create_arch.create(args.output_path, args.force)
         except Exception as e:
             logger.warning(e)
@@ -89,21 +89,21 @@ class CreateArchitecture:
     def __init__(
         self,
         trace_dir: str,
-        max_construction_order: int,
+        max_callback_construction_order_on_path_searching: int,
         architecture: Optional[Architecture] = None
     ) -> None:
         if architecture:
             self._arch = architecture
         else:
-            if max_construction_order is not None:
-                if max_construction_order >= 0:
+            if max_callback_construction_order_on_path_searching is not None:
+                if max_callback_construction_order_on_path_searching >= 0:
                     self._arch = Architecture('lttng',
                                               trace_dir,
-                                              max_construction_order=max_construction_order)
+                                              max_callback_construction_order_on_path_searching=max_callback_construction_order_on_path_searching)
                 else:
                     raise ValueError(
-                        'error: argument -m/--max_construction_order (%s)'
-                        % max_construction_order)
+                        'error: argument -m/--max_callback_construction_order_on_path_searching (%s)'
+                        % max_callback_construction_order_on_path_searching)
             else:
                 self._arch = Architecture('lttng', trace_dir)
 

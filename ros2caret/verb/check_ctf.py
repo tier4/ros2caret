@@ -38,14 +38,20 @@ class CheckCTFVerb(VerbExtension):
         try:
             if args.max_callback_construction_order_on_path_searching is not None:
                 if args.max_callback_construction_order_on_path_searching >= 0:
+                    tmp = args.max_callback_construction_order_on_path_searching
                     Lttng(args.trace_dir)
-                    Architecture('lttng',
-                                 args.trace_dir,
-                                 max_callback_construction_order_on_path_searching=args.max_callback_construction_order_on_path_searching)
+                    Architecture(
+                        'lttng',
+                        args.trace_dir,
+                        max_callback_construction_order_on_path_searching=tmp
+                    )
                 else:
                     raise ValueError(
-                        'error: argument -m/--max_callback_construction_order_on_path_searching (%s)'
-                        % args.max_callback_construction_order_on_path_searching)
+                        'error: argument',
+                        '-m/--max_callback_construction_order_on_path_searching',
+                        '(%s)' % args.max_callback_construction_order_on_path_searching
+                    )
+
             else:
                 Lttng(args.trace_dir)
                 Architecture('lttng', args.trace_dir)

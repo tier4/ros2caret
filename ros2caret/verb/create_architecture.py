@@ -76,7 +76,10 @@ class CreateArchitectureVerb(VerbExtension):
 
     def main(self, *, args):
         try:
-            create_arch = CreateArchitecture(args.trace_dir, args.max_callback_construction_order_on_path_searching)
+            create_arch = CreateArchitecture(
+                args.trace_dir,
+                args.max_callback_construction_order_on_path_searching
+            )
             create_arch.create(args.output_path, args.force)
         except Exception as e:
             logger.warning(e)
@@ -97,13 +100,18 @@ class CreateArchitecture:
         else:
             if max_callback_construction_order_on_path_searching is not None:
                 if max_callback_construction_order_on_path_searching >= 0:
-                    self._arch = Architecture('lttng',
-                                              trace_dir,
-                                              max_callback_construction_order_on_path_searching=max_callback_construction_order_on_path_searching)
+                    tmp = max_callback_construction_order_on_path_searching
+                    self._arch = Architecture(
+                        'lttng',
+                        trace_dir,
+                        max_callback_construction_order_on_path_searching=tmp
+                    )
                 else:
                     raise ValueError(
-                        'error: argument -m/--max_callback_construction_order_on_path_searching (%s)'
-                        % max_callback_construction_order_on_path_searching)
+                        'error: argument',
+                        '-m/--max_callback_construction_order_on_path_searching',
+                        '(%s)' % max_callback_construction_order_on_path_searching
+                    )
             else:
                 self._arch = Architecture('lttng', trace_dir)
 

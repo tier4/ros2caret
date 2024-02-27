@@ -65,7 +65,8 @@ class VerifyPathsVerb(VerbExtension):
 
     def main(self, *, args):
         try:
-            verify_paths = VerifyPaths(args.arch_path, args.max_callback_construction_order_on_path_searching)
+            verify_paths = VerifyPaths(args.arch_path,
+                                       args.max_callback_construction_order_on_path_searching)
             verify_paths.verify(args.verified_path_names)
         except Exception as e:
             logger.info(e)
@@ -86,13 +87,18 @@ class VerifyPaths:
         else:
             if max_callback_construction_order_on_path_searching is not None:
                 if max_callback_construction_order_on_path_searching >= 0:
-                    self._arch = Architecture('yaml',
-                                              arch_path,
-                                              max_callback_construction_order_on_path_searching=max_callback_construction_order_on_path_searching)
+                    tmp = max_callback_construction_order_on_path_searching
+                    self._arch = Architecture(
+                        'yaml',
+                        arch_path,
+                        max_callback_construction_order_on_path_searching=tmp
+                    )
                 else:
                     raise ValueError(
-                        'error: argument -m/--max_callback_construction_order_on_path_searching (%s)'
-                        % max_callback_construction_order_on_path_searching)
+                        'error: argument',
+                        '-m/--max_callback_construction_order_on_path_searching',
+                        '(%s)' % max_callback_construction_order_on_path_searching
+                    )
             else:
                 self._arch = Architecture('yaml', arch_path)
 

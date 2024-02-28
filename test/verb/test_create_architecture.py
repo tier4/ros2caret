@@ -14,6 +14,7 @@
 
 from logging import ERROR, INFO
 
+from caret_analyze import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
 from ros2caret.verb.create_architecture import CreateArchitecture
 
 
@@ -34,7 +35,9 @@ class TestCreateArchitecture:
         mocker.patch.object(architecture_mock,
                             'export',
                             side_effect=OSError(''))
-        create_arch = CreateArchitecture('', 10, architecture_mock)
+        create_arch = CreateArchitecture('',
+                                         MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
+                                         architecture_mock)
 
         create_arch.create('output_path', True)
         assert len(caplog.records) == 1

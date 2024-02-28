@@ -14,6 +14,7 @@
 
 from logging import INFO
 
+from caret_analyze import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
 from ros2caret.verb.verify_paths import VerifyPaths
 
 
@@ -41,6 +42,8 @@ class TestVerifyPaths:
                             'get_path',
                             return_value=path_mock)
 
-        verify_paths = VerifyPaths('', 10, architecture_mock)
+        verify_paths = VerifyPaths('',
+                                   MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
+                                   architecture_mock)
         verify_paths.verify(['verified_path_name'])
         assert len(caplog.records) == 0

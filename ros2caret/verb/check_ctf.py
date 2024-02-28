@@ -16,7 +16,8 @@
 from logging import getLogger
 
 from caret_analyze import Architecture, Lttng
-from caret_analyze.architecture import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
+from caret_analyze.architecture.architecture import \
+    MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
 from ros2caret.verb import VerbExtension
 
 logger = getLogger(__name__)

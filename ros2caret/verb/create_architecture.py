@@ -19,6 +19,7 @@ from typing import Optional
 
 try:
     import caret_analyze
+    from caret_analyze import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
     Architecture = caret_analyze.Architecture
     Error = caret_analyze.exceptions.Error
     CatchErrors = (OSError, Error)
@@ -29,7 +30,6 @@ except ModuleNotFoundError as e:
     else:
         raise(e)
 
-from caret_analyze import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
 from ros2caret.verb import VerbExtension
 
 
@@ -48,9 +48,6 @@ root_logger.removeHandler(root_logger.handlers[0])
 logger = getLogger(__name__)
 logger.setLevel(INFO)
 logger.addHandler(handler)
-
-max_callback_construction_order_on_path_searching = \
-    MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
 
 
 class CreateArchitectureVerb(VerbExtension):
@@ -77,7 +74,7 @@ class CreateArchitectureVerb(VerbExtension):
             ' this value are ignored on path searching.'
             ' The value must be positive integer or "0". "0" means unlimited.'
             ' Default: %(default)s',
-            required=False, default=max_callback_construction_order_on_path_searching,
+            required=False, default=MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
         )
 
     def main(self, *, args):

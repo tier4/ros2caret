@@ -18,6 +18,7 @@ from typing import List, Optional
 
 try:
     import caret_analyze
+    from caret_analyze import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
     Architecture = caret_analyze.Architecture
 except ModuleNotFoundError as e:
     if 'GITHUB_ACTION' in os.environ:
@@ -25,7 +26,6 @@ except ModuleNotFoundError as e:
     else:
         raise(e)
 
-from caret_analyze import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
 from ros2caret.verb import VerbExtension
 
 
@@ -41,9 +41,6 @@ handler.setFormatter(formatter)
 logger = getLogger(__name__)
 logger.setLevel(INFO)
 logger.addHandler(handler)
-
-max_callback_construction_order_on_path_searching = \
-    MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
 
 
 class VerifyPathsVerb(VerbExtension):
@@ -66,7 +63,7 @@ class VerifyPathsVerb(VerbExtension):
             ' this value are ignored on path searching.'
             ' The value must be positive integer or "0". "0" means unlimited.'
             ' Default: %(default)s',
-            required=False, default=max_callback_construction_order_on_path_searching,
+            required=False, default=MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
         )
 
     def main(self, *, args):

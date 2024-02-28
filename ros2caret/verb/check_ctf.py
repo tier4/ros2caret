@@ -16,6 +16,7 @@
 from logging import getLogger
 
 from caret_analyze import Architecture, Lttng
+from caret_analyze.architecture import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
 from ros2caret.verb import VerbExtension
 
 logger = getLogger(__name__)
@@ -30,30 +31,27 @@ class CheckCTFVerb(VerbExtension):
         parser.add_argument(
             '-m', '--max_callback_construction_order_on_path_searching',
             type=int, dest='max_callback_construction_order_on_path_searching',
-            help='max construction order on path searching.'
-                 'The value must be positive integer. "0" is unlimited.',
-            required=False, default=None)
+            help='callbacks whose construction_order are greater than'
+            ' this value are ignored on path searching.'
+            ' The value must be positive integer or "0". "0" means unlimited.'
+            ' Default: %(default)s',
+            required=False, default=MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
+        )
 
     def main(self, *, args):
         try:
-            if args.max_callback_construction_order_on_path_searching is not None:
-                if args.max_callback_construction_order_on_path_searching >= 0:
-                    tmp = args.max_callback_construction_order_on_path_searching
-                    Lttng(args.trace_dir)
-                    Architecture(
-                        'lttng',
-                        args.trace_dir,
-                        max_callback_construction_order_on_path_searching=tmp
-                    )
-                else:
-                    raise ValueError(
-                        'error: argument',
-                        '-m/--max_callback_construction_order_on_path_searching',
-                        '(%s)' % args.max_callback_construction_order_on_path_searching
-                    )
-
-            else:
+            if args.max_callback_construction_order_on_path_searching >= 0:
                 Lttng(args.trace_dir)
-                Architecture('lttng', args.trace_dir)
+                Architecture(
+                    'lttng',
+                    args.trace_dir,
+                    args.max_callback_construction_order_on_path_searching
+                )
+            else:
+                raise ValueError(
+                    'error: argument',
+                    '-m/--max_callback_construction_order_on_path_searching',
+                    '(%s)' % args.max_callback_construction_order_on_path_searching
+                )
         except Exception as e:
             logger.warning(e)

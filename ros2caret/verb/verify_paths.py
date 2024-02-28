@@ -23,8 +23,9 @@ except ModuleNotFoundError as e:
     if 'GITHUB_ACTION' in os.environ:
         Architecture = None
     else:
-        raise e
+        raise(e)
 
+from caret_analyze.architecture import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
 from ros2caret.verb import VerbExtension
 
 
@@ -58,9 +59,11 @@ class VerifyPathsVerb(VerbExtension):
         parser.add_argument(
             '-m', '--max_callback_construction_order_on_path_searching',
             type=int, dest='max_callback_construction_order_on_path_searching',
-            help='max construction order on path searching.'
-                 'The value must be positive integer. "0" is unlimited.',
-            required=False, default=None
+            help='callbacks whose construction_order are greater than'
+            ' this value are ignored on path searching.'
+            ' The value must be positive integer or "0". "0" means unlimited.'
+            ' Default: %(default)s',
+            required=False, default=MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
         )
 
     def main(self, *, args):
@@ -85,22 +88,18 @@ class VerifyPaths:
         if architecture:
             self._arch = architecture
         else:
-            if max_callback_construction_order_on_path_searching is not None:
-                if max_callback_construction_order_on_path_searching >= 0:
-                    tmp = max_callback_construction_order_on_path_searching
-                    self._arch = Architecture(
-                        'yaml',
-                        arch_path,
-                        max_callback_construction_order_on_path_searching=tmp
-                    )
-                else:
-                    raise ValueError(
-                        'error: argument',
-                        '-m/--max_callback_construction_order_on_path_searching',
-                        '(%s)' % max_callback_construction_order_on_path_searching
-                    )
+            if max_callback_construction_order_on_path_searching >= 0:
+                self._arch = Architecture(
+                    'yaml',
+                    arch_path,
+                    max_callback_construction_order_on_path_searching
+                )
             else:
-                self._arch = Architecture('yaml', arch_path)
+                raise ValueError(
+                    'error: argument',
+                    '-m/--max_callback_construction_order_on_path_searching',
+                    '(%s)' % max_callback_construction_order_on_path_searching
+                )
 
     def verify(
         self,

@@ -42,6 +42,9 @@ logger = getLogger(__name__)
 logger.setLevel(INFO)
 logger.addHandler(handler)
 
+max_callback_construction_order_on_path_searching = \
+    MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
+
 
 class VerifyPathsVerb(VerbExtension):
 
@@ -63,7 +66,7 @@ class VerifyPathsVerb(VerbExtension):
             ' this value are ignored on path searching.'
             ' The value must be positive integer or "0". "0" means unlimited.'
             ' Default: %(default)s',
-            required=False, default=MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
+            required=False, default=max_callback_construction_order_on_path_searching,
         )
 
     def main(self, *, args):

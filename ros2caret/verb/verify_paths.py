@@ -25,7 +25,7 @@ except ModuleNotFoundError as e:
     else:
         raise(e)
 
-from caret_analyze.architecture import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
+from caret_analyze import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
 from ros2caret.verb import VerbExtension
 
 

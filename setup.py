@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 
 package_name = 'ros2caret'

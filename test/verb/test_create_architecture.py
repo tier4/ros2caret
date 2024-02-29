@@ -14,7 +14,14 @@
 
 from logging import ERROR, INFO
 
-from caret_analyze import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
+try:
+    import os
+    from caret_analyze import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
+except ModuleNotFoundError as e:
+    if 'GITHUB_ACTION' in os.environ:
+        MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING = 10
+    else:
+        raise e
 from ros2caret.verb.create_architecture import CreateArchitecture
 
 

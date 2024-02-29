@@ -19,7 +19,7 @@ from typing import Optional
 
 try:
     import caret_analyze
-    from caret_analyze import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
+    from caret_analyze import DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
     Architecture = caret_analyze.Architecture
     Error = caret_analyze.exceptions.Error
     CatchErrors = (OSError, Error)
@@ -74,7 +74,7 @@ class CreateArchitectureVerb(VerbExtension):
             ' this value are ignored on path searching.'
             ' The value must be positive integer or "0". "0" means unlimited.'
             ' Default: %(default)s',
-            required=False, default=MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
+            required=False, default=DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
         )
 
     def main(self, *, args):

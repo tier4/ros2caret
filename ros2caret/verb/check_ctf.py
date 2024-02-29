@@ -15,7 +15,7 @@
 
 from logging import getLogger
 
-from caret_analyze import Architecture, Lttng, MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
+from caret_analyze import Architecture, Lttng, DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
 from ros2caret.verb import VerbExtension
 
 logger = getLogger(__name__)
@@ -34,7 +34,7 @@ class CheckCTFVerb(VerbExtension):
             ' this value are ignored on path searching.'
             ' The value must be positive integer or "0". "0" means unlimited.'
             ' Default: %(default)s',
-            required=False, default=MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
+            required=False, default=DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
         )
 
     def main(self, *, args):

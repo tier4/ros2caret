@@ -16,10 +16,10 @@ from logging import INFO
 
 try:
     import os
-    from caret_analyze import MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
+    from caret_analyze import DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
 except ModuleNotFoundError as e:
     if 'GITHUB_ACTION' in os.environ:
-        MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING = 10
+        DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING = 10
     else:
         raise e
 
@@ -37,7 +37,7 @@ class TestVerifyPaths:
                             return_value=path_mock)
 
         verify_paths = VerifyPaths('',
-                                   MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
+                                   DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
                                    architecture_mock)
         verify_paths.verify(['verified_path_name'])
         assert len(caplog.records) == 1
@@ -53,7 +53,7 @@ class TestVerifyPaths:
                             return_value=path_mock)
 
         verify_paths = VerifyPaths('',
-                                   MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
+                                   DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
                                    architecture_mock)
         verify_paths.verify(['verified_path_name'])
         assert len(caplog.records) == 0

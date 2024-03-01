@@ -73,8 +73,6 @@ class VerifyPathsVerb(VerbExtension):
             verify_paths.verify(args.verified_path_names)
         except Exception as e:
             logger.info(e)
-            return 1
-        return 0
 
 
 class VerifyPaths:

@@ -86,8 +86,6 @@ class CreateArchitectureVerb(VerbExtension):
             create_arch.create(args.output_path, args.force)
         except Exception as e:
             logger.warning(e)
-            return 1
-        return 0
 
 
 class CreateArchitecture:
@@ -102,11 +100,10 @@ class CreateArchitecture:
             self._arch = architecture
         else:
             if max_callback_construction_order_on_path_searching >= 0:
-                tmp = max_callback_construction_order_on_path_searching
                 self._arch = Architecture(
                     'lttng',
                     trace_dir,
-                    max_callback_construction_order_on_path_searching=tmp
+                    max_callback_construction_order_on_path_searching
                 )
             else:
                 raise ValueError(

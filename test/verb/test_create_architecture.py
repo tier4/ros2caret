@@ -14,6 +14,14 @@
 
 from logging import ERROR, INFO
 
+try:
+    import os
+    from caret_analyze import DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
+except ModuleNotFoundError as e:
+    if 'GITHUB_ACTION' in os.environ:
+        DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING = 10
+    else:
+        raise e
 from ros2caret.verb.create_architecture import CreateArchitecture
 
 
@@ -22,7 +30,9 @@ class TestCreateArchitecture:
     def test_create_success_case(self, caplog, mocker):
         architecture_mock = mocker.Mock()
         mocker.patch.object(architecture_mock, 'export', return_value=None)
-        create_arch = CreateArchitecture('', architecture_mock)
+        create_arch = CreateArchitecture('',
+                                         DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
+                                         architecture_mock)
 
         create_arch.create('output_path', True)
         assert len(caplog.records) == 1
@@ -34,7 +44,9 @@ class TestCreateArchitecture:
         mocker.patch.object(architecture_mock,
                             'export',
                             side_effect=OSError(''))
-        create_arch = CreateArchitecture('', architecture_mock)
+        create_arch = CreateArchitecture('',
+                                         DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
+                                         architecture_mock)
 
         create_arch.create('output_path', True)
         assert len(caplog.records) == 1

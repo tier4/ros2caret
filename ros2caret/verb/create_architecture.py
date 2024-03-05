@@ -19,6 +19,7 @@ from typing import Optional
 
 try:
     import caret_analyze
+    from caret_analyze import DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
     Architecture = caret_analyze.Architecture
     Error = caret_analyze.exceptions.Error
     CatchErrors = (OSError, Error)
@@ -66,10 +67,25 @@ class CreateArchitectureVerb(VerbExtension):
             help='allow overwrite of architecture file',
             required=False, default=False
         )
+        parser.add_argument(
+            '-m', '--max_callback_construction_order_on_path_searching',
+            type=int, dest='max_callback_construction_order_on_path_searching',
+            help='callbacks whose construction_order are greater than'
+            ' this value are ignored on path searching.'
+            ' The value must be positive integer or "0". "0" means unlimited.'
+            ' Default: %(default)s',
+            required=False, default=DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
+        )
 
     def main(self, *, args):
-        create_arch = CreateArchitecture(args.trace_dir)
-        create_arch.create(args.output_path, args.force)
+        try:
+            create_arch = CreateArchitecture(
+                args.trace_dir,
+                args.max_callback_construction_order_on_path_searching
+            )
+            create_arch.create(args.output_path, args.force)
+        except Exception as e:
+            logger.warning(e)
 
 
 class CreateArchitecture:
@@ -77,12 +93,24 @@ class CreateArchitecture:
     def __init__(
         self,
         trace_dir: str,
+        max_callback_construction_order_on_path_searching: int,
         architecture: Optional[Architecture] = None
     ) -> None:
         if architecture:
             self._arch = architecture
         else:
-            self._arch = Architecture('lttng', trace_dir)
+            if max_callback_construction_order_on_path_searching >= 0:
+                self._arch = Architecture(
+                    'lttng',
+                    trace_dir,
+                    max_callback_construction_order_on_path_searching
+                )
+            else:
+                raise ValueError(
+                    'error: argument',
+                    '-m/--max_callback_construction_order_on_path_searching',
+                    '(%s)' % max_callback_construction_order_on_path_searching
+                )
 
     def create(self, output_path: str, force: bool) -> None:
         try:

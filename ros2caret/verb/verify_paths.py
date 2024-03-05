@@ -18,6 +18,7 @@ from typing import List, Optional
 
 try:
     import caret_analyze
+    from caret_analyze import DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING
     Architecture = caret_analyze.Architecture
 except ModuleNotFoundError as e:
     if 'GITHUB_ACTION' in os.environ:
@@ -55,10 +56,23 @@ class VerifyPathsVerb(VerbExtension):
             help='path names to be verified.',
             required=False,
         )
+        parser.add_argument(
+            '-m', '--max_callback_construction_order_on_path_searching',
+            type=int, dest='max_callback_construction_order_on_path_searching',
+            help='callbacks whose construction_order are greater than'
+            ' this value are ignored on path searching.'
+            ' The value must be positive integer or "0". "0" means unlimited.'
+            ' Default: %(default)s',
+            required=False, default=DEFAULT_MAX_CALLBACK_CONSTRUCTION_ORDER_ON_PATH_SEARCHING,
+        )
 
     def main(self, *, args):
-        verify_paths = VerifyPaths(args.arch_path)
-        verify_paths.verify(args.verified_path_names)
+        try:
+            verify_paths = VerifyPaths(args.arch_path,
+                                       args.max_callback_construction_order_on_path_searching)
+            verify_paths.verify(args.verified_path_names)
+        except Exception as e:
+            logger.info(e)
 
 
 class VerifyPaths:
@@ -66,12 +80,24 @@ class VerifyPaths:
     def __init__(
         self,
         arch_path: str,
+        max_callback_construction_order_on_path_searching: int,
         architecture: Optional[Architecture] = None
     ) -> None:
         if architecture:
             self._arch = architecture
         else:
-            self._arch = Architecture('yaml', arch_path)
+            if max_callback_construction_order_on_path_searching >= 0:
+                self._arch = Architecture(
+                    'yaml',
+                    arch_path,
+                    max_callback_construction_order_on_path_searching
+                )
+            else:
+                raise ValueError(
+                    'error: argument',
+                    '-m/--max_callback_construction_order_on_path_searching',
+                    '(%s)' % max_callback_construction_order_on_path_searching
+                )
 
     def verify(
         self,

@@ -16,6 +16,7 @@ import os.path
 import re
 
 from ros2caret.verb import VerbExtension
+from ament_index_python.packages import get_package_share_directory
 
 
 class CaretVersionVerb(VerbExtension):
@@ -25,9 +26,10 @@ class CaretVersionVerb(VerbExtension):
         print('v' + version)
 
     def get_version(self):
-        version_path = f'{os.path.dirname(os.path.realpath(__file__))}/../../setup.py'
-        version_pattern = re.compile(r"\s*version\s*=\s*['\"](\d+\.\d+\.\d+)['\"]")
-        with open(version_path) as f:
+        dir_path = get_package_share_directory('ros2caret')
+        xml_path = os.path.join(dir_path, 'package.xml')
+        version_pattern = re.compile(r"\s*<version>\s*(\d+\.\d+\.\d+)\s*</version>\s*")
+        with open(xml_path) as f:
             for line in f:
                 match = version_pattern.search(line)
                 if match:

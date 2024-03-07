@@ -13,9 +13,9 @@
 # limitations under the License.
 
 import os.path
+
 from ament_index_python.packages import get_package_share_directory, PackageNotFoundError
 import xml.etree.ElementTree as ET
-
 from ros2caret.verb import VerbExtension
 
 

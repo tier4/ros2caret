@@ -13,10 +13,10 @@
 # limitations under the License.
 
 import os.path
-import re
 
 from ros2caret.verb import VerbExtension
-from ament_index_python.packages import get_package_share_directory
+from ament_index_python.packages import get_package_share_directory, PackageNotFoundError
+import xml.etree.ElementTree as ET
 
 
 class CaretVersionVerb(VerbExtension):
@@ -26,13 +26,15 @@ class CaretVersionVerb(VerbExtension):
         print('v' + version)
 
     def get_version(self):
-        dir_path = get_package_share_directory('ros2caret')
-        xml_path = os.path.join(dir_path, 'package.xml')
-        version_pattern = re.compile(r"\s*<version>\s*(\d+\.\d+\.\d+)\s*</version>\s*")
-        with open(xml_path) as f:
-            for line in f:
-                match = version_pattern.search(line)
-                if match:
-                    return match.group(1)
-            else:
-                raise RuntimeError('Unable to find version string.')
+        # FileNotFoundError
+        try:
+            dir_path = get_package_share_directory('ros2caret')
+            xml_path = os.path.join(dir_path, 'package.xml')
+            tree = ET.parse(xml_path)
+            root = tree.getroot()
+            version_element = root.find('version')
+            if version_element is None:
+                raise RuntimeError("Error: Package version not found in package.xml")
+            return version_element.text
+        except(PackageNotFoundError, FileNotFoundError):
+            raise RuntimeError("Error: package or file share/ros2caret/package.xml not found")

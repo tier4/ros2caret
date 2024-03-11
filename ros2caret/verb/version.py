@@ -39,4 +39,4 @@ class CaretVersionVerb(VerbExtension):
             return version_element.text
         except(PackageNotFoundError, FileNotFoundError):
             xml_path = os.path.join(get_package_share_directory('ros2caret'), 'package.xml')
-            raise RuntimeError(f'Error: not found {xml_path}')
+            raise RuntimeError(f'Error: Cannot find {xml_path}')

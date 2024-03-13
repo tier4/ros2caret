@@ -27,7 +27,6 @@ class CaretVersionVerb(VerbExtension):
         print('v' + version)
 
     def get_version(self):
-        # FileNotFoundError
         try:
             dir_path = get_package_share_directory('ros2caret')
             xml_path = os.path.join(dir_path, 'package.xml')

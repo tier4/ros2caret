@@ -54,7 +54,7 @@ class CreateArchitectureVerb(VerbExtension):
 
     def add_arguments(self, parser, cli_name):
         parser.add_argument(
-            'trace_dir', type=str,
+            'trace_dir', type=str, nargs='+',
             help='the path to the main trace directory'
         )
         parser.add_argument(
@@ -92,7 +92,7 @@ class CreateArchitecture:
 
     def __init__(
         self,
-        trace_dir: str,
+        trace_dir: list[str],
         max_callback_construction_order_on_path_searching: int,
         architecture: Optional[Architecture] = None
     ) -> None:

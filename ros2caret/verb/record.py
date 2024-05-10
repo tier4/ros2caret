@@ -181,6 +181,13 @@ class RecordVerb(VerbExtension):
         context_names = names.DEFAULT_CONTEXT
         events_kernel = []
 
+        # check lttng session exist
+        command = "lttng list | grep --quiet \'\\[active\\]\'"
+        ps = subprocess.run(command, shell=True)
+        if ps.returncode == 0:
+            print('LTTng session is already active.')
+            exit(0)
+
         rclpy.init()
         node = CaretSessionNode()
 
@@ -229,12 +236,12 @@ class RecordVerb(VerbExtension):
 
         def _fini():
             node.stop_progress()
-            node.end()
             if clock_recorder:
                 # cspell: ignore killpg, getpgid
                 os.killpg(os.getpgid(clock_recorder.pid), signal.SIGTERM)
             print('stopping & destroying tracing session')
             lttng.lttng_fini(session_name=args.session_name)
+            node.end()
 
         if args.record_clock:
             # cspell: ignore preexec, setpgrp

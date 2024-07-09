@@ -67,10 +67,8 @@ class CaretSessionNode(Node):
         if msg.caret_node_name in self._caret_node_names:
             self._caret_node_names.remove(msg.caret_node_name)
         else:
-           return
-
-        if self._progress:
-            self._progress.update()
+            if self._progress:
+                self._progress.update()
 
         if len(self._caret_node_names) == 0:
             self.stop_progress()

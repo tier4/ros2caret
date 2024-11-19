@@ -233,7 +233,7 @@ class RecordVerb(VerbExtension):
                 break
             print(f'Failed to init LTTng. retry {i} / {args.init_retry_num}')
             time.sleep(1)
-        if not init_result:
+        else:
             print('Failed to init LTTng.')
             exit(0)
 

@@ -154,6 +154,10 @@ class RecordVerb(VerbExtension):
         parser.add_argument(
             '-c', '--record-clock', dest='record_clock', action='store_true',
             help='launch the node where the /clock topic is stored to use ROS time. ')
+        parser.add_argument(
+            '--init-retry-num', dest='init_retry_num', type=int,
+            default=10,
+            help='retry num to initialize LTTng')
 
     def main(self, *, args):
         if args.light_mode:
@@ -221,7 +225,16 @@ class RecordVerb(VerbExtension):
             raise ValueError('--subbuffer-size-kernel value must be power of two.')
         init_args['subbuffer_size_kernel'] = args.subbuffer_size_kernel
         init_args['immediate'] = args.immediate
-        init(**init_args)
+
+        for i in range(args.init_retry_num):
+            init_result = init(**init_args)
+            if init_result:
+                break
+            print(f'Failed to init LTTng. retry {i} / {args.init_retry_num}')
+            time.sleep(1)
+        else:
+            print('Failed to init LTTng.')
+            exit(0)
 
         def _run():
             recordable_node_num = node.start(args.verbose, args.recording_frequency)
@@ -230,7 +243,7 @@ class RecordVerb(VerbExtension):
             try:
                 input('press enter to stop...')
             except EOFError:
-                print('\nstd::input is not supported in this system. press ctrl-c to stop...')
+                print('\nstd::input is not supported in this system.\npress ctrl-c to stop...')
                 while True:
                     time.sleep(10)
 

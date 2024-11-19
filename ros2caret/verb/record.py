@@ -159,7 +159,6 @@ class RecordVerb(VerbExtension):
             default=10,
             help='retry num to initialize LTTng')
 
-
     def main(self, *, args):
         if args.light_mode:
             events_ust = [

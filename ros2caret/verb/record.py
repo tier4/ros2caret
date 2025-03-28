@@ -256,7 +256,7 @@ class RecordVerb(VerbExtension):
             lttng.lttng_fini(session_name=args.session_name)
             node.end()
 
-        if args.record_clock:
+        if True:    # For evaluator. Always record clock.
             # cspell: ignore preexec, setpgrp
             clock_recorder = subprocess.Popen(
                 ['ros2', 'run', 'caret_trace', 'clock_recorder'],

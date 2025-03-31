@@ -177,7 +177,8 @@ class RecordVerb(VerbExtension):
                     'ros2_caret:rcl_*init',
                     'ros2_caret:caret_init',
                     'ros2_caret:sim_time',
-                    'ros2:message_construct']
+                    'ros2:message_construct',
+                    'ros2:agnocast*']
             if os.environ['ROS_DISTRO'][0] >= 'i':
                 events_ust.append('ros2:rcl_publish')
         else:

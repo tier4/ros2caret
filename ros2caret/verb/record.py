@@ -191,6 +191,10 @@ class RecordVerb(VerbExtension):
         if ps.returncode == 0:
             print('LTTng session is already active.')
             exit(0)
+        else:
+          # if lttng session start temp file exists, remove it
+          if os.path.exists(f'/tmp/caret_lttng_session_started'):
+               os.remove('/tmp/caret_lttng_session_started')
 
         rclpy.init()
         node = CaretSessionNode()
@@ -254,6 +258,9 @@ class RecordVerb(VerbExtension):
                 os.killpg(os.getpgid(clock_recorder.pid), signal.SIGTERM)
             print('stopping & destroying tracing session')
             lttng.lttng_fini(session_name=args.session_name)
+            # if lttng session start temp file exists, remove it
+            if os.path.exists(f'/tmp/caret_lttng_session_started'):
+               os.remove('/tmp/caret_lttng_session_started')
             node.end()
 
         if args.record_clock:

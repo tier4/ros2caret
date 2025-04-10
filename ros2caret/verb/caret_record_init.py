@@ -130,4 +130,10 @@ def init(
         return False
     # Simple sanity check
     assert trace_directory == full_session_path
+    # Locate the CARET lttng session started file in /tmp
+    caret_lttng_session_started_file_path = '/tmp/caret_lttng_session_started'
+    f = open(caret_lttng_session_started_file_path, 'w')
+    f.write(trace_directory)
+    f.close()
+
     return True

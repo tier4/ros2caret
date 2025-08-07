@@ -20,7 +20,11 @@ setup(
     maintainer_email='yamasaki@isp.co.jp, uetsuki@isp.co.jp',
     description='TODO: Package description',
     license='Apache License 2.0',
-    tests_require=['pytest'],
+    extras_require = {
+        'test': [
+            'pytest',
+        ],
+    },
     entry_points={
         'ros2cli.command': [
             'caret = ros2caret.command.caret:CaretCommand',

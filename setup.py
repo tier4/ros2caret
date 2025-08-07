@@ -20,7 +20,7 @@ setup(
     maintainer_email='yamasaki@isp.co.jp, uetsuki@isp.co.jp',
     description='TODO: Package description',
     license='Apache License 2.0',
-    extras_require = {
+    extras_require={
         'test': [
             'pytest',
         ],

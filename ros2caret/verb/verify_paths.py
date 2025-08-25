@@ -82,7 +82,7 @@ class VerifyPaths:
         arch_path: str,
         max_callback_construction_order_on_path_searching: int,
         architecture: Optional[Architecture] = None
-    ) -> None:
+    ) -> None:  # type: ignore
         if architecture:
             self._arch = architecture
         else:

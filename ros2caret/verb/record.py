@@ -138,8 +138,8 @@ class RecordVerb(VerbExtension):
             help='light mode (record high level events only)')
         parser.add_argument(
             '--subbuffer-size-ust', dest='subbuffer_size_ust', type=int,
-            default=8*4096,
-            help='the size of the subbuffers for userspace events(default: 8*4096). '
+            default=32*4096,
+            help='the size of the subbuffers for userspace events(default: 32*4096). '
                  'buffer size must be power of two. '
                  'available in ROS Distributions after iron. ')
         parser.add_argument(
@@ -212,7 +212,7 @@ class RecordVerb(VerbExtension):
         # --subbuffer_size_ust/kernel are available in ROS Distributions after iron.
 
         if os.environ['ROS_DISTRO'][0] < 'i' \
-                and args.subbuffer_size_ust != 8*4096:
+                and args.subbuffer_size_ust != 32*4096:
             raise ValueError('the --subbuffer-size-ust option is '
                              'available in ROS Distributions after iron')
         if args.subbuffer_size_ust & (args.subbuffer_size_ust-1):

@@ -10,6 +10,7 @@
 
   <exec_depend>python3-tabulate</exec_depend>
   <exec_depend>ament_index_python</exec_depend>
+  <exec_depend>ros2trace</exec_depend>
   <depend>ros2cli</depend>
   <depend>caret_analyze</depend>
   <depend>caret_msgs</depend>
